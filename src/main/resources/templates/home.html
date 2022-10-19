@@ -24,8 +24,37 @@
         로그인
       </button>
     </div>
+  </div> <!-- /container -->
+<br><br>
+    <div class="container" style="max-width: 600px">
+      <div class="row">
+      <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg" type="button"
+                th:onclick="|location.href='@{/post/free}'|">
+          자유 게시판
+        </button>
+      </div>
+      <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg" type="button"
+                th:onclick="|location.href='@{/post/concert}'|">
+          공연 게시판
+        </button>
+      </div>
+      <div class="col">
+        <button class="w-100 btn btn-secondary btn-lg" type="button"
+                th:onclick="|location.href='@{/post/trade}'|">
+          중고거래
+        </button>
+      </div>
+    </div>
+      <div class="py-5 text-center">
+        <h3>인기 게시물</h3>
+        카테고리별 top5
+        <h3>내가 저장한 게시물</h3>
+        로그인 해주세요
+      </div>
   </div>
+</div>
   <hr class="my-4">
-</div> <!-- /container -->
 </body>
 </html>
