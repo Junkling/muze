@@ -20,11 +20,8 @@ public class MemberRepository {
      */
 
     public Member save(Member member) {
-        LocalDateTime calendar = LocalDateTime.now();
         member.setId(++sequence);
-        member.setCreated(calendar);
-        log.info("new member={}", member);
-        log.info("created={}", member.getCreated());
+        member.setCreated(LocalDateTime.now());
         store.put(member.getId(), member);
         return member;
     }

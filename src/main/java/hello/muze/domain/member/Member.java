@@ -3,13 +3,21 @@ package hello.muze.domain.member;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 
 //@Entity
+
+/**
+ * 추가해야할 기능: nickName 저장시 중복 방지, 메일 인증 추가, 비밀번호 확인 시스템, 메일로 계정정보 찾기
+ */
 @Data
+@Entity
 public class Member {
 
     public Member(){
@@ -23,9 +31,8 @@ public class Member {
         this.email = email;
     }
 
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Id
     @NotEmpty(message = "아이디를 입력하세요")
     private String loginId;
     @NotEmpty(message = "닉네임을 입력하세요")
