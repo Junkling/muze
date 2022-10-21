@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class PostSearchCond {
+    private Long id;
 
     private Integer categoryId;
     private String title;
@@ -15,6 +16,9 @@ public class PostSearchCond {
         this.title = title;
         this.memberName = memberName;
         this.contents = contents;
+    }
+    public PostSearchCond(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public PostSearchCond() {
