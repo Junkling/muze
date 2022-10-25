@@ -42,7 +42,7 @@ public class LoginController {
         }
         HttpSession session = request.getSession();
         session.setAttribute(LONGIN_MEMBER, loginId);
-        return "redirect:/"+redirectURL;
+        return "redirect:"+redirectURL;
     }
 
     @PostMapping("/logout")
