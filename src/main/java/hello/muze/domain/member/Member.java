@@ -2,11 +2,9 @@ package hello.muze.domain.member;
 
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.lang.Nullable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
@@ -24,11 +22,12 @@ public class Member {
 
     }
 
-    public Member(String loginId, String nickName, String password, String email) {
+    public Member(String loginId, String nickName, String password, String email, String profile) {
         this.loginId = loginId;
         this.nickName = nickName;
         this.password = password;
         this.email = email;
+        this.profile = profile;
     }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,17 +41,11 @@ public class Member {
     @Length(min = 8, max = 16)
     private String password;
 
-    @Length(min = 8, max = 16)
-    private String passwordCheck;
-
     @NotEmpty(message = "이메일 주소를 입력하세요")
     @Email(message = "이메일 형식이 올바르지 않습니다.")
     private String email;
-
     private String profile;
-
     private LocalDateTime created;
-
     private LocalDateTime updated;
 
 
