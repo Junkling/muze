@@ -23,6 +23,7 @@ public class JpaMemberRepository implements MemberRepository {
     @Override
 
     public Member save(Member member) {
+        member.setCreated(LocalDateTime.now());
         repository.save(member);
         return member;
     }

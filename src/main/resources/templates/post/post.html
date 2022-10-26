@@ -26,16 +26,16 @@
         <input type="text" id="postId" name="postId" class="form-control" value="1" th:value="${post.id}" readonly>
     </div>
     <div>
+        <label for="categoryId">카테고리 ID</label>
+        <input type="text" id="categoryId" name="categoryId" class="form-control" value="10" th:value="${post.categoryName}" readonly>
+    </div>
+    <div>
         <label for="title">제목</label>
         <input type="text" id="title" name="title" class="form-control" value="제목 1" th:value="${post.title}" readonly>
     </div>
     <div>
-        <label for="contents">가격</label>
+        <label for="contents">내용</label>
         <input type="text" id="contents" name="contents" class="form-control" value="내용 1" th:value="${post.contents}" readonly>
-    </div>
-    <div>
-        <label for="category">수량</label>
-        <input type="text" id="category" name="category" class="form-control" value="10" th:value="${post.categoryName}" readonly>
     </div>
 
     <hr class="my-4">

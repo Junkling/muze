@@ -26,6 +26,9 @@
     <form th:object="${postSearch}" method="get" class="form-inline">
     <div class="row">
         <div class="col">
+            <input type="text" th:field="*{category}" class="form-control" placeholder="카테고리"/>
+        </div>
+        <div class="col">
             <input type="text" th:field="*{title}" class="form-control" placeholder="제목"/>
         </div>
         <div class="col">
