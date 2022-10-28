@@ -14,7 +14,7 @@ public interface PostServiceInterface {
 
     Optional<Post> findById(Long id);
 
-    List<Post> findByCategory(PostSearchCond postSearchCond);
+//    List<Post> findByCategory(PostSearchCond postSearchCond);
 
     List<Post> findPost(PostSearchCond postSearchCond);
 

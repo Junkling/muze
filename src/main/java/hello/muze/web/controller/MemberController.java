@@ -1,4 +1,4 @@
-package hello.muze.web.controller.member;
+package hello.muze.web.controller;
 
 import hello.muze.domain.member.Member;
 import hello.muze.web.repository.member.MemberRepository;

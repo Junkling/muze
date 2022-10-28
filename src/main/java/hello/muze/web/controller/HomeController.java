@@ -1,6 +1,7 @@
 package hello.muze.web.controller;
 
 import hello.muze.domain.member.Member;
+import hello.muze.web.argumentresolber.Login;
 import hello.muze.web.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,7 +17,7 @@ public class HomeController {
     private final MemberRepository memberRepository;
 
     @GetMapping("/")
-    public String loginHome(@SessionAttribute(name = LONGIN_MEMBER,required = false)Member loginMember, Model model) {
+    public String loginHome(@Login Member loginMember, Model model) {
         if (loginMember == null) {
             return "home";
         }

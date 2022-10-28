@@ -1,4 +1,4 @@
-package hello.muze.config;
+package hello.muze.web.config;
 
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.jpa.JpaMemberRepository;

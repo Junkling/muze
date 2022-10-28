@@ -14,6 +14,6 @@ public interface PostRepository {
 
     List<Post> findPost(PostSearchCond cond);
 
-    List<Post> findByCategory(PostSearchCond cond);
+//    List<Post> findByCategory(PostSearchCond cond);
 
 }

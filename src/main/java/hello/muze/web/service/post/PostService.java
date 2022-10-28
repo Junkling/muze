@@ -35,10 +35,10 @@ public class PostService implements PostServiceInterface {
         return postRepository.findById(id);
     }
 
-    @Override
-    public List<Post> findByCategory(PostSearchCond postSearchCond) {
-        return postRepository.findByCategory(postSearchCond);
-    }
+//    @Override
+//    public List<Post> findByCategory(PostSearchCond postSearchCond) {
+//        return postRepository.findByCategory(postSearchCond);
+//    }
 
     @Override
     public List<Post> findPost(PostSearchCond postSearchCond) {

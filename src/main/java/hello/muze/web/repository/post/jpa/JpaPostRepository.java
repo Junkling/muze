@@ -58,30 +58,30 @@ public class JpaPostRepository implements PostRepository {
     @Override
     public List<Post> findPost(PostSearchCond cond) {
         String title = cond.getTitle();
-        Integer categoryId = cond.getCategoryId();
+//        Integer categoryId = cond.getCategoryId();
         String contents = cond.getContents();
-        BooleanBuilder categoryDef = new BooleanBuilder(post.categoryId.eq(categoryId));
+//        BooleanBuilder categoryDef = new BooleanBuilder(post.categoryId.eq(categoryId));
         List<Post> posts = query
                 .select(post)
                 .from(post)
-                .where(categoryDef,titleLike(title),contentLike(contents))
+                .where(titleLike(title),contentLike(contents))
                 .fetch();
         return posts;
     }
 
-    @Override
-    public List<Post> findByCategory(PostSearchCond cond) {
-        Integer categoryId = cond.getCategoryId();
-
-        BooleanBuilder categoryDef = new BooleanBuilder(post.categoryId.eq(categoryId));
-
-        List<Post> posts = query
-                .select(post)
-                .from(post)
-                .where(categoryDef)
-                .fetch();
-        return posts;
-    }
+//    @Override
+//    public List<Post> findByCategory(PostSearchCond cond) {
+////        Integer categoryId = cond.getCategoryId();
+//
+//        BooleanBuilder categoryDef = new BooleanBuilder(post.categoryId.eq(categoryId));
+//
+//        List<Post> posts = query
+//                .select(post)
+//                .from(post)
+//                .where(categoryDef)
+//                .fetch();
+//        return posts;
+//    }
 
     private BooleanExpression titleLike(String title) {
         if (StringUtils.hasText(title)) {

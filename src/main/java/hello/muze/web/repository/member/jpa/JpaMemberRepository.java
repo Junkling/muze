@@ -1,7 +1,6 @@
 package hello.muze.web.repository.member.jpa;
 
 import hello.muze.domain.member.Member;
-import hello.muze.web.controller.login.LoginForm;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;

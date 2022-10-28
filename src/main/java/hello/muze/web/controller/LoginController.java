@@ -1,16 +1,12 @@
-package hello.muze.web.controller.login;
+package hello.muze.web.controller;
 
-import hello.muze.web.service.login.LoginService;
 import hello.muze.domain.member.Member;
 import hello.muze.web.service.login.LoginServiceInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -21,9 +17,9 @@ import static hello.muze.web.SessionConst.LONGIN_MEMBER;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
+@RequestMapping
 public class LoginController {
     private final LoginServiceInterface loginService;
-//    private final SessionManager sessionManager;
 
     @GetMapping("/login")
     public String loginForm(@ModelAttribute LoginForm loginForm) {

@@ -1,4 +1,4 @@
-package hello.muze.web.controller.login;
+package hello.muze.web.controller;
 
 import lombok.Data;
 

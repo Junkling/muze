@@ -1,4 +1,4 @@
-package hello.muze.web.controller.post;
+package hello.muze.web.controller;
 
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.post.PostRepository;
@@ -20,42 +20,42 @@ import java.util.List;
 public class PostController {
     private final PostServiceInterface postService;
 
-    @GetMapping
-    public String post(@ModelAttribute PostSearchCond postSearchCond, Model model) {
-        List<Post> posts = postService.findPost(postSearchCond);
+    @GetMapping("/list")
+    public String post(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model) {
+        List<Post> posts = postService.findPost(postSearch);
         model.addAttribute("posts", posts);
-        return "post/free";
+        return "/post/posts";
     }
     @GetMapping("/{postId}")
     public String post(@PathVariable long postId, Model model) {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
-        return "post";
+        return "/post/post";
     }
     @GetMapping("/add")
-    public String addForm() {
-        return "addForm";
+    public String addForm(Model model) {
+        return "/post/addForm";
     }
-    
+
     @PostMapping("/add")
-    public String addpost(@ModelAttribute Post post, RedirectAttributes redirectAttributes) {
+    public String addPost(@ModelAttribute Post post, RedirectAttributes redirectAttributes) {
         Post savedPost = postService.save(post);
         redirectAttributes.addAttribute("postId", savedPost.getId());
         redirectAttributes.addAttribute("status", true);
-        return "redirect:/posts/{postId}";
+        return "redirect:/post/list/{postId}";
     }
 
     @GetMapping("/{postId}/edit")
     public String editForm(@PathVariable Long postId, Model model) {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
-        return "editForm";
+        return "/post/editForm";
     }
 
     @PostMapping("/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
         postService.update(postId, updateParam);
-        return "redirect:/posts/{postId}";
+        return "redirect:/post/posts/{postId}";
     }
 
 

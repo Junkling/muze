@@ -25,9 +25,9 @@
 -->
     <form th:object="${postSearch}" method="get" class="form-inline">
     <div class="row">
-        <div class="col">
-            <input type="text" th:field="*{category}" class="form-control" placeholder="카테고리"/>
-        </div>
+<!--        <div class="col">-->
+<!--            <input type="text" th:field="*{category}" class="form-control" placeholder="카테고리"/>-->
+<!--        </div>-->
         <div class="col">
             <input type="text" th:field="*{title}" class="form-control" placeholder="제목"/>
         </div>
@@ -43,7 +43,7 @@
             <div class="col">
                 <button class="btn btn-primary float-end"
                         onclick="location.href='post/addForm.html'"
-                        th:onclick="|location.href='@{/post/free/add}'|"
+                        th:onclick="|location.href='@{/post/add}'|"
                         type="button">게시글 쓰기
                 </button>
             </div>
