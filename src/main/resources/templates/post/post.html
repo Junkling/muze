@@ -44,13 +44,13 @@
         <div class="col">
             <button class="w-100 btn btn-primary btn-lg"
                     onclick="location.href='editForm.html'"
-                    th:onclick="|location.href='@{/posts/{postId}/edit(postId=${post.id})}'|"
+                    th:onclick="|location.href='@{/post/{postId}/edit(postId=${post.id})}'|"
                     type="button">게시글 수정</button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"
                     onclick="location.href='posts.html'"
-                    th:onclick="|location.href='@{/posts}'|"
+                    th:onclick="|location.href='@{/post}'|"
                     type="button">목록으로</button>
         </div>
     </div>

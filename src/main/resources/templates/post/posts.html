@@ -11,23 +11,8 @@
     <div class="py-5 text-center">
         <h2>게시글</h2>
     </div>
-
-<!--
-    <div class="row">
-        <div class="col">
-            <button class="btn btn-primary float-end"
-                    onclick="location.href='addForm.html'"
-                    th:onclick="|location.href='@{/posts/add}'|"
-                    type="button">상품 등록
-            </button>
-        </div>
-    </div>
--->
     <form th:object="${postSearch}" method="get" class="form-inline">
     <div class="row">
-<!--        <div class="col">-->
-<!--            <input type="text" th:field="*{category}" class="form-control" placeholder="카테고리"/>-->
-<!--        </div>-->
         <div class="col">
             <input type="text" th:field="*{title}" class="form-control" placeholder="제목"/>
         </div>
@@ -43,7 +28,7 @@
             <div class="col">
                 <button class="btn btn-primary float-end"
                         onclick="location.href='post/addForm.html'"
-                        th:onclick="|location.href='@{/post/add}'|"
+                        th:onclick="|location.href='@{/posts/add}'|"
                         type="button">게시글 쓰기
                 </button>
             </div>
@@ -57,18 +42,14 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>제목</th>
-                <th>내용</th>
+                <th>게시글</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="post : ${posts}">
-                <td><a href="post.html" th:href="@{/posts/{postId}(postId=${post.id})}" th:text="${post.id}">회원id</a>
-                </td>
-                <td><a href="post.html" th:href="@{|/posts/${post.id}|}" th:text="${post.title}">제목</a></td>
-                <td th:text="${post.title}">제목</td>
-                <td th:text="${post.contents}">내용</td>
+
+                <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.title}">제목</a></td>
+
             </tr>
             </tbody>
         </table>

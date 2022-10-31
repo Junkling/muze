@@ -16,43 +16,42 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/post")
 public class PostController {
     private final PostServiceInterface postService;
 
-    @GetMapping("/list")
+    @GetMapping("/posts")
     public String post(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model) {
         List<Post> posts = postService.findPost(postSearch);
         model.addAttribute("posts", posts);
         return "/post/posts";
     }
-    @GetMapping("/{postId}")
+    @GetMapping("/post/{postId}")
     public String post(@PathVariable long postId, Model model) {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
         return "/post/post";
     }
-    @GetMapping("/add")
+    @GetMapping("/posts/add")
     public String addForm(Model model) {
         return "/post/addForm";
     }
 
-    @PostMapping("/add")
+    @PostMapping("/posts/add")
     public String addPost(@ModelAttribute Post post, RedirectAttributes redirectAttributes) {
         Post savedPost = postService.save(post);
         redirectAttributes.addAttribute("postId", savedPost.getId());
         redirectAttributes.addAttribute("status", true);
-        return "redirect:/post/list/{postId}";
+        return "redirect:/post/{postId}";
     }
 
-    @GetMapping("/{postId}/edit")
+    @GetMapping("/post/{postId}/edit")
     public String editForm(@PathVariable Long postId, Model model) {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
         return "/post/editForm";
     }
 
-    @PostMapping("/{postId}/edit")
+    @PostMapping("/post/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
         postService.update(postId, updateParam);
         return "redirect:/post/posts/{postId}";
