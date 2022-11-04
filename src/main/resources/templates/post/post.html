@@ -12,49 +12,79 @@
 </head>
 <body>
 
-<div class="container">
 
-    <div class="py-5 text-center">
-        <h2>상품 상세</h2>
-    </div>
+<div>
 
-    <!-- 추가 -->
-    <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
+    <div class="container">
 
-    <div>
-        <label for="postId">게시물 번호</label>
-        <input type="text" id="postId" name="postId" class="form-control" value="1" th:value="${post.id}" readonly>
-    </div>
-    <div>
-        <label for="categoryId">카테고리 ID</label>
-        <input type="text" id="categoryId" name="categoryId" class="form-control" value="10" th:value="${post.categoryName}" readonly>
-    </div>
-    <div>
-        <label for="title">제목</label>
-        <input type="text" id="title" name="title" class="form-control" value="제목 1" th:value="${post.title}" readonly>
-    </div>
-    <div>
-        <label for="contents">내용</label>
-        <input type="text" id="contents" name="contents" class="form-control" value="내용 1" th:value="${post.contents}" readonly>
-    </div>
-
-    <hr class="my-4">
-
-    <div class="row">
-        <div class="col">
-            <button class="w-100 btn btn-primary btn-lg"
-                    onclick="location.href='editForm.html'"
-                    th:onclick="|location.href='@{/post/{postId}/edit(postId=${post.id})}'|"
-                    type="button">게시글 수정</button>
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-primary btn-lg"
+                        onclick="location.href='editForm.html'"
+                        th:onclick="|location.href='@{/post/{postId}/edit(postId=${post.id})}'|"
+                        type="button">게시글 수정
+                </button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='posts.html'"
+                        th:onclick="|location.href='@{/post}'|"
+                        type="button">목록으로
+                </button>
+            </div>
         </div>
-        <div class="col">
-            <button class="w-100 btn btn-secondary btn-lg"
-                    onclick="location.href='posts.html'"
-                    th:onclick="|location.href='@{/post}'|"
-                    type="button">목록으로</button>
-        </div>
-    </div>
+        <hr class="my-4">
+        <div>
 
-</div> <!-- /container -->
+            글 번호: <span th:text="${post.id}"></span>
+            작성자: <span th:text="${post.memberName}"></span>
+        </div>
+        <br>
+
+            <!-- 추가 -->
+            <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
+
+            <div>
+                <label for="title">제목</label>
+                <input type="text" id="title" name="title" class="form-control" value="제목 1" th:value="${post.title}"
+                       readonly>
+            </div>
+            <div>
+                <label for="contents">내용</label>
+                <input type="text" id="contents" name="contents" class="form-control" value="내용 1"
+                       th:value="${post.contents}" readonly>
+            </div>
+
+        <hr class="my-4">
+            <div class="card">
+                <div class="card-body"><textarea class="form-control" rows="1"></textarea></divclass>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">등록</button>
+                    </div>
+                </div>
+            </div>
+        <br/>
+        <div class="card">
+            <div class="card-header">
+                댓글 리스트
+                <ul id="comment--box"class="list-group">
+                    <li id="comments--1"class="list-group-item d-flex justify-content-between">
+                        <div>댓글 내용입니다.</div>
+                        <div class="d-flex">
+                            <div class="font-italic">
+                                작성자: 김준혁&nbsp;
+                            </div>
+                            <button class="badge">삭제</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        </div> <!-- /container -->
+    </div>
+</div>
 </body>
 </html>

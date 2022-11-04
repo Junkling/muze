@@ -1,13 +1,17 @@
 package hello.muze.domain.post;
 
+import hello.muze.domain.comment.Comment;
+import hello.muze.domain.member.Member;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,28 +19,30 @@ public class Post {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer memberId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "memberId")
+    private Member member;
 
-    private String memberName;
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    private List<Comment> comment;
+
+
+
     @NotEmpty(message = "제목을 입력해주세요")
     private String title;
+    @Lob
     @NotEmpty(message = "내용을 입력해주세요")
     private String contents;
 
-    private LocalDateTime created;
+    @ColumnDefault("0")
+    private Integer count;//조회수
 
-    private LocalDateTime updated;
+    @CreationTimestamp
+    private Timestamp created;
+
+    @UpdateTimestamp
+    private Timestamp updated;
+
     private Integer categoryId;
     private String categoryName;
-
-    public Post() {
-    }
-
-    public Post(Integer memberId, String memberName, String title, String contents, Integer categoryId) {
-        this.memberId = memberId;
-        this.memberName = memberName;
-        this.title = title;
-        this.contents = contents;
-        this.categoryId = categoryId;
-    }
 }

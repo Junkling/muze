@@ -1,12 +1,15 @@
 package hello.muze.domain.member;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 //@Entity
@@ -45,8 +48,10 @@ public class Member {
     @Email(message = "이메일 형식이 올바르지 않습니다.")
     private String email;
     private String profile;
-    private LocalDateTime created;
-    private LocalDateTime updated;
+    @CreationTimestamp
+    private Timestamp created;
+    @UpdateTimestamp
+    private Timestamp updated;
 
 
 }

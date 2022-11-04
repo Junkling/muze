@@ -35,6 +35,7 @@ public class JpaPostRepository implements PostRepository {
 
     @Override
     public Post save(Post post) {
+        post.setCreated(LocalDateTime.now());
         em.persist(post);
         return post;
     }

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 
-@Slf4j
 @Repository
 @Transactional
 @RequiredArgsConstructor
@@ -25,6 +24,7 @@ public class JpaMemberRepository implements MemberRepository {
         member.setCreated(LocalDateTime.now());
         repository.save(member);
         return member;
+
     }
 
     @Override

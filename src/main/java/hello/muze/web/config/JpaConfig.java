@@ -1,10 +1,14 @@
 package hello.muze.web.config;
 
+import hello.muze.web.repository.comment.CommentRepository;
+import hello.muze.web.repository.comment.jpa.JpaCommentRepository;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.jpa.JpaMemberRepository;
 import hello.muze.web.repository.member.jpa.SpringDataJpaMemberRepository;
 import hello.muze.web.repository.post.PostRepository;
 import hello.muze.web.repository.post.jpa.JpaPostRepository;
+import hello.muze.web.service.comment.CommentService;
+import hello.muze.web.service.comment.CommentServiceInterface;
 import hello.muze.web.service.login.LoginService;
 import hello.muze.web.service.login.LoginServiceInterface;
 import hello.muze.web.service.post.PostService;
@@ -35,10 +39,17 @@ public class JpaConfig {
     public PostServiceInterface postService() {
         return new PostService(postRepository());
     }
-
     @Bean
     public PostRepository postRepository() {
         return new JpaPostRepository(em);
+    }
+    @Bean
+    public CommentServiceInterface commentService() {
+        return new CommentService(commentRepository());
+    }
+    @Bean
+    public CommentRepository commentRepository() {
+        return new JpaCommentRepository(em);
     }
 
 }
