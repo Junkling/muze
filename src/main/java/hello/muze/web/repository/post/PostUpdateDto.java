@@ -10,13 +10,13 @@ public class PostUpdateDto {
     private String contents;
     private LocalDateTime updated;
 
-    private Integer categoryId;
+    private String categoryName;
 
-    public PostUpdateDto(String title, String contents, Integer categoryId) {
+    public PostUpdateDto(String title, String contents, String categoryName) {
 
         this.title = title;
         this.contents = contents;
-        this.categoryId = categoryId;
+        this.categoryName = categoryName;
         updated = LocalDateTime.now();
     }
 }

@@ -21,7 +21,6 @@ public class JpaMemberRepository implements MemberRepository {
     @Override
 
     public Member save(Member member) {
-        member.setCreated(LocalDateTime.now());
         repository.save(member);
         return member;
 
@@ -33,7 +32,6 @@ public class JpaMemberRepository implements MemberRepository {
         findId.setNickName(updateDto.getNickName());
         findId.setPassword(updateDto.getPassword());
         findId.setProfile(updateDto.getProfile());
-        findId.setUpdated(LocalDateTime.now());
     }
 
     @Override
@@ -45,6 +43,12 @@ public class JpaMemberRepository implements MemberRepository {
     public Optional<Member> findMember(String loginId) {
         return repository.findAll().stream().filter(member->member.getLoginId().equals(loginId)).findFirst();
     }
+
+    @Override
+    public void delete(Integer userId) {
+        repository.deleteById(userId);
+    }
+
 
 
     /**

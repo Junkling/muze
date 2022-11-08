@@ -43,6 +43,7 @@ public class Post {
     @UpdateTimestamp
     private Timestamp updated;
 
-    private Integer categoryId;
+    @Enumerated(EnumType.STRING)
     private String categoryName;
+    
 }

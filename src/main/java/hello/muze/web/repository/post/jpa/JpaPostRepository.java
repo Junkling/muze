@@ -35,7 +35,6 @@ public class JpaPostRepository implements PostRepository {
 
     @Override
     public Post save(Post post) {
-        post.setCreated(LocalDateTime.now());
         em.persist(post);
         return post;
     }
@@ -45,8 +44,7 @@ public class JpaPostRepository implements PostRepository {
         Post findPost = em.find(Post.class,postId);
         findPost.setTitle(updateDto.getTitle());
         findPost.setContents(updateDto.getContents());
-        findPost.setCategoryId(updateDto.getCategoryId());
-        findPost.setUpdated(LocalDateTime.now());
+        findPost.setCategoryName(updateDto.getCategoryName());
     }
 
 

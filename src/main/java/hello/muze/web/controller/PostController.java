@@ -8,6 +8,7 @@ import hello.muze.web.service.post.PostService;
 import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -51,6 +52,7 @@ public class PostController {
         return "/post/editForm";
     }
 
+    @Transactional
     @PostMapping("/post/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
         postService.update(postId, updateParam);

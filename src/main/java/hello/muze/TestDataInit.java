@@ -32,19 +32,5 @@ public class TestDataInit {
         memberRepository.save(member);
 
     }
-    @PostConstruct
-    public void initPost() {
-
-        Post post = new Post();
-        post.setCategoryId(1);
-        post.setCreated(LocalDateTime.now());
-        post.setTitle("테스트");
-        post.setContents("게시글 테스트");
-        post.setCategoryName("자유");
-        post.setMemberName("운영자");
-        postRepository.save(post);
-
-    }
-
 
 }

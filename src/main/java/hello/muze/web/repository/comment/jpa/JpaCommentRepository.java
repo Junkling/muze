@@ -35,7 +35,6 @@ public class JpaCommentRepository implements CommentRepository {
 
     @Override
     public Comment save(Comment comment) {
-        comment.setCreated(LocalDateTime.now());
         em.persist(comment);
         return comment;
     }
@@ -44,7 +43,6 @@ public class JpaCommentRepository implements CommentRepository {
     public void update(Long commentId, CommentUpdateDto commentUpdateDto) {
         Comment findComment = em.find(Comment.class, commentId);
         findComment.setContents(commentUpdateDto.getContents());
-        findComment.setUpdated(LocalDateTime.now());
 
     }
 
@@ -67,7 +65,7 @@ public class JpaCommentRepository implements CommentRepository {
 
     private BooleanExpression postIdLike(Long postId) {
         if (postId!=null) {
-            return comment.postId.like(Long.toString(postId));
+            return comment.post.id.like(Long.toString(postId));
         }
         return null;
     }

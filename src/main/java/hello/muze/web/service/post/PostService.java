@@ -21,7 +21,6 @@ public class PostService implements PostServiceInterface {
 
     @Override
     public Post save(Post post) {
-        post.setCreated(LocalDateTime.now());
         return postRepository.save(post);
     }
 
