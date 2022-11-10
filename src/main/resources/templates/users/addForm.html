@@ -15,6 +15,30 @@
  </style>
 </head>
 <body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="/">Muze</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <button class="w-100 btn btn-dark btn-lg"
+                        onclick="location.href='items.html'"
+                        th:onclick="|location.href='@{/login}'|" type="button">
+                    로그인
+                </button>
+            </li>
+            <li class="nav item">
+                <button class="w-100 btn btn-dark btn-lg" type="button"
+                        th:onclick="|location.href='@{/users}'|">
+                    회원 가입
+                </button>
+            </li>
+        </ul>
+    </div>
+    </ul>
+</nav>
 <div class="container">
     <div class="py-5 text-center">
         <h2>회원 가입</h2>
@@ -27,7 +51,7 @@
         </div>
         <div>
             <label for="loginId">로그인 ID</label>
-            <input type="text" id="loginId" th:field="*{loginId}" class="formcontrol"
+            <input type="text" id="loginId" th:field="*{loginId}" class="form-control"
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{loginId}" />
         </div>
@@ -48,19 +72,19 @@
 
         <div>
             <label for="nickName">이름</label>
-            <input type="text" id="nickName" th:field="*{nickName}" class="formcontrol"
+            <input type="text" id="nickName" th:field="*{nickName}" class="form-control"
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{nickName}" />
         </div>
         <div>
             <label for="email">email</label>
-            <input type="text" id="email" th:field="*{email}" class="formcontrol"
+            <input type="text" id="email" th:field="*{email}" class="form-control"
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{email}" />
         </div>
         <div>
             <label for="profile">내 프로필</label>
-            <input type="text" id="profile" th:field="*{profile}" class="formcontrol"
+            <input type="text" id="profile" th:field="*{profile}" class="form-control"
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{profile}" />
         </div>
@@ -78,6 +102,14 @@
             </div>
         </div>
     </form>
+    <hr class="my-4">
+
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>Created by Junkling</p>
+        <p>연락처 : 📞010-xxxx-xxxx</p>
+        <p>주소 : 🏠경기도 안양시</p>
+
+    </div>
 </div> <!-- /container -->
 </body>
 </html>

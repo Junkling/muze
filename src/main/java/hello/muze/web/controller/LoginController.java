@@ -41,6 +41,8 @@ public class LoginController {
         return "redirect:"+redirectURL;
     }
 
+
+
     @PostMapping("/logout")
     public String logout(HttpServletRequest request) {
         //세션을 종료하는것이 목적이기 때문에 생성 여부를 false로 줌

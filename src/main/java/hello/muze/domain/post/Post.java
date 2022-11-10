@@ -1,5 +1,6 @@
 package hello.muze.domain.post;
 
+import hello.muze.domain.category.CategoryType;
 import hello.muze.domain.comment.Comment;
 import hello.muze.domain.member.Member;
 import lombok.Data;
@@ -43,7 +44,8 @@ public class Post {
     @UpdateTimestamp
     private Timestamp updated;
 
+    @ColumnDefault("FREE")
     @Enumerated(EnumType.STRING)
-    private String categoryName;
+    private CategoryType categoryName;
     
 }

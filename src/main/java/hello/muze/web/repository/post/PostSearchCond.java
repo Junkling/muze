@@ -1,6 +1,10 @@
 package hello.muze.web.repository.post;
 
+import hello.muze.domain.category.CategoryType;
+import hello.muze.domain.member.Member;
 import lombok.Data;
+
+import javax.persistence.*;
 
 @Data
 public class PostSearchCond {
@@ -10,8 +14,16 @@ public class PostSearchCond {
     private String title;
     private String contents;
 
-    public PostSearchCond(Integer categoryId, String title, String memberName, String contents) {
-//        this.categoryId = categoryId;
+    @Enumerated(EnumType.STRING)
+    private CategoryType categoryName;
+
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "memberId")
+//    private Member member;
+
+    public PostSearchCond(CategoryType categoryName, String title, String contents) {
+//        this.member = member;
+        this.categoryName = categoryName;
         this.title = title;
         this.contents = contents;
     }

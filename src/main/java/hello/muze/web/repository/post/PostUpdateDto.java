@@ -1,7 +1,10 @@
 package hello.muze.web.repository.post;
 
+import hello.muze.domain.category.CategoryType;
 import lombok.Data;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 
 @Data
@@ -10,9 +13,10 @@ public class PostUpdateDto {
     private String contents;
     private LocalDateTime updated;
 
-    private String categoryName;
+    @Enumerated(EnumType.STRING)
+    private CategoryType categoryName;
 
-    public PostUpdateDto(String title, String contents, String categoryName) {
+    public PostUpdateDto(String title, String contents, CategoryType categoryName) {
 
         this.title = title;
         this.contents = contents;
