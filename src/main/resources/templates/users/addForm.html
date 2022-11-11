@@ -45,24 +45,32 @@
     </div>
     <h4 class="mb-3">회원 정보 입력</h4>
     <form action="post" th:action th:object="${member}" method="post">
+
         <div th:if="${#fields.hasGlobalErrors()}">
             <p class="field-error" th:each="err : ${#fields.globalErrors()}"
                th:text="${err}">전체 오류 메시지</p>
         </div>
         <div>
-            <label for="loginId">로그인 ID</label>
-            <input type="text" id="loginId" th:field="*{loginId}" class="form-control"
-                   th:errorclass="field-error">
-            <div class="field-error" th:errors="*{loginId}" />
+            <label for="loginId" class="sr-only">로그인 아이디</label>
+            <input type="text" id="loginId" th:field="*{loginId}" th:classappend="${#fields.hasErrors('loginId')} ? 'is-invalid'" name="loginId" class="form-control" required autofocus>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}">
+                중복회원
+            </div>
         </div>
         <div>
-            <label for="password">비밀번호</label>
-            <input type="password" id="password" th:field="*{password}"
-                   class="form-control"
-                   th:errorclass="field-error">
-            <div class="field-error" th:errors="*{password}" />
+            <label for="password" class="sr-only">비밀번호</label>
+            <input type="password" id="password" th:field="*{password}" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'" name="password" class="form-control" required>
+            <div class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                비밀번호 불일치
+            </div>
         </div>
-<!--        <div>-->
+        <div>
+            <label for="password" class="sr-only">비밀번호 확인</label>
+            <input type="password" id="passwordConfirm" name="passwordConfirm" class="form-control" required>
+        </div>
+
+
+        <!--        <div>-->
 <!--            <label for="passwordCheck">비밀번호 확인</label>-->
 <!--            <input type="passwordCheck" id="passwordCheck" th:field="*{passwordCheck}"-->
 <!--                   class="form-control"-->
@@ -71,7 +79,7 @@
 <!--        </div>-->
 
         <div>
-            <label for="nickName">이름</label>
+            <label for="nickName">닉네임 </label>
             <input type="text" id="nickName" th:field="*{nickName}" class="form-control"
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{nickName}" />

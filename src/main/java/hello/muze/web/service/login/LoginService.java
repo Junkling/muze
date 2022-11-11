@@ -18,7 +18,7 @@ public class LoginService implements LoginServiceInterface {
 
     @Override
     public Member login(String loginId, String password) {
-        return memberRepository.findMember(loginId)
+        return memberRepository.findByMember(loginId)
                 .filter(m -> m.getPassword().equals(password))
                 .orElse(null);
     }

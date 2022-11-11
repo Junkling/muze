@@ -5,6 +5,7 @@ import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +28,8 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public void update(Integer memberId, MemberUpdateDto updateDto) {
-        Member findId = repository.findById(memberId).orElseThrow();
+    public void update(Integer loginId, MemberUpdateDto updateDto) {
+        Member findId = repository.findById(loginId).orElseThrow();
         findId.setNickName(updateDto.getNickName());
         findId.setPassword(updateDto.getPassword());
         findId.setProfile(updateDto.getProfile());
@@ -40,8 +41,16 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findMember(String loginId) {
+    public Optional<Member> findByMember(String loginId) {
         return repository.findAll().stream().filter(member->member.getLoginId().equals(loginId)).findFirst();
+    }
+    @Override
+    public Optional<Member> findByNickName(String nickName) {
+        return repository.findAll().stream().filter(member->member.getNickName().equals(nickName)).findFirst();
+    }
+    @Override
+    public Optional<Member> findByEmail(String email) {
+        return repository.findAll().stream().filter(member->member.getEmail().equals(email)).findFirst();
     }
 
     @Override
