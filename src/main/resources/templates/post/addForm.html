@@ -18,18 +18,30 @@
         <h2>게시글 등록 폼</h2>
     </div>
 
-    <form action="post.html" th:action method="post">
+    <form action="post.html" th:action th:object="${post}" method="post">
+<!--        <div>-->
+<!--            <div>카테고리</div>-->
+<!--            <div th:each="type : ${categoryTypes}" class="form-check form-check-inline">-->
+<!--            <input type="radio" th:field="*{categoryType}" th:value="${type.name()}" class="form-check-input">-->
+<!--            <label th:for="${#ids.prev('categoryType')}" th:text="${type.description}" class="form-check-label">FREE</label>-->
+<!--            </div>-->
+<!--        </div>-->
         <div>
-            <label for="categoryId">카테고리 ID</label>
-            <input type="text" id="categoryId" name="categoryId" class="form-control" placeholder="수량을 입력하세요">
+            <div>카테고리</div>
+            <select th:field="*{categoryType}" class="form-select">
+                <option value="">== 카테고리 선택 ==</option>
+                <option th:each="categoryType: ${categoryTypes}" th:value="${categoryType.code}"
+                        th:text="${categoryType.displayName}">FREE</option>
+            </select>
         </div>
+        <hr class="my-4">
         <div>
             <label for="title">제목</label>
-            <input type="text" id="title" name="title" class="form-control" placeholder="제목을 입력하세요">
+            <input type="text" id="title" th:field="*{title}" class="form-control" placeholder="제목을 입력하세요">
         </div>
         <div>
             <label for="contents">내용</label>
-            <input type="text" id="contents" name="contents" class="form-control" placeholder="내용을 입력하세요">
+            <input type="text" id="contents" th:field="*{contents}" class="form-control" placeholder="내용을 입력하세요">
         </div>
 
         <hr class="my-4">

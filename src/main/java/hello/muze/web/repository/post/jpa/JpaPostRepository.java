@@ -44,7 +44,7 @@ public class JpaPostRepository implements PostRepository {
         Post findPost = em.find(Post.class,postId);
         findPost.setTitle(updateDto.getTitle());
         findPost.setContents(updateDto.getContents());
-        findPost.setCategoryName(updateDto.getCategoryName());
+//        findPost.setCategoryType(updateDto.getCategoryName());
     }
 
 
@@ -63,7 +63,7 @@ public class JpaPostRepository implements PostRepository {
         List<Post> posts = query
                 .select(post)
                 .from(post)
-                .where(titleLike(title),contentLike(contents))
+                .where()
                 .fetch();
         return posts;
     }

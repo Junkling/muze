@@ -14,6 +14,9 @@
     <form th:object="${postSearch}" method="get" class="form-inline">
     <div class="row">
         <div class="col">
+            <input type="text" th:field="*{categoryType}" class="form-control" placeholder="카테고리"/>
+        </div>
+        <div class="col">
             <input type="text" th:field="*{title}" class="form-control" placeholder="제목"/>
         </div>
         <div class="col">
@@ -42,12 +45,17 @@
         <table class="table">
             <thead>
             <tr>
-                <th>게시글</th>
+                <th>카테고리</th>
+                <th>글 번호</th>
+                <th>제목</th>
+
             </tr>
             </thead>
             <tbody>
             <tr th:each="post : ${posts}">
 
+                <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.categoryType}">카테고리</a></td>
+                <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.id}">글 번호</a></td>
                 <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.title}">제목</a></td>
 
             </tr>

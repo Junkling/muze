@@ -1,6 +1,6 @@
 package hello.muze.domain.post;
 
-import hello.muze.domain.category.CategoryType;
+//import hello.muze.domain.post.category.CategoryType;
 import hello.muze.domain.comment.Comment;
 import hello.muze.domain.member.Member;
 import lombok.Data;
@@ -11,7 +11,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -24,9 +23,12 @@ public class Post {
     @JoinColumn(name = "memberId")
     private Member member;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
-    private List<Comment> comment;
+//    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+//    @JoinColumn(name = "commentId")
+//    private List<Comment> comment;
 
+    @ColumnDefault("0")
+    private Integer likeCount;
 
 
     @NotEmpty(message = "제목을 입력해주세요")
@@ -35,8 +37,9 @@ public class Post {
     @NotEmpty(message = "내용을 입력해주세요")
     private String contents;
 
+
     @ColumnDefault("0")
-    private Integer count;//조회수
+    private Integer view;//조회수
 
     @CreationTimestamp
     private Timestamp created;
@@ -44,8 +47,8 @@ public class Post {
     @UpdateTimestamp
     private Timestamp updated;
 
-    @ColumnDefault("FREE")
-    @Enumerated(EnumType.STRING)
-    private CategoryType categoryName;
+//    @ColumnDefault("FREE")
+//    @Enumerated(EnumType.STRING)
+    private String categoryType;
     
 }

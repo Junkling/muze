@@ -1,10 +1,10 @@
 package hello.muze.web.controller;
 
+import hello.muze.domain.post.CategoryType;
+//import hello.muze.domain.post.category.CategoryType;
 import hello.muze.domain.post.Post;
-import hello.muze.web.repository.post.PostRepository;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
-import hello.muze.web.service.post.PostService;
 import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -13,12 +13,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class PostController {
     private final PostServiceInterface postService;
+
+    @ModelAttribute("categoryTypes")
+    public List<CategoryType> categoryTypes() {
+        List<CategoryType> categoryTypes = new ArrayList<>();
+        categoryTypes.add(new CategoryType("자유게시판", "자유 게시판"));
+        categoryTypes.add(new CategoryType("공연게시판", "공연 게시판"));
+        categoryTypes.add(new CategoryType("중고거래", "중고거래"));
+        return categoryTypes;
+    }
 
     @GetMapping("/posts")
     public String post(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model) {
@@ -34,6 +44,7 @@ public class PostController {
     }
     @GetMapping("/posts/add")
     public String addForm(Model model) {
+        model.addAttribute("post", new Post());
         return "/post/addForm";
     }
 

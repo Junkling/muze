@@ -28,7 +28,7 @@
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
                         onclick="location.href='posts.html'"
-                        th:onclick="|location.href='@{/post}'|"
+                        th:onclick="|location.href='@{/posts}'|"
                         type="button">목록으로
                 </button>
             </div>
@@ -37,7 +37,9 @@
         <div>
 
             글 번호: <span th:text="${post.id}"></span>
-            작성자: <span th:text="${post.memberName}"></span>
+            <br>
+<!--            작성자: <span th:text="${post.memberName}"></span>-->
+            카테고리: <span th:text="${post.categoryType}"></span>
         </div>
         <br>
 

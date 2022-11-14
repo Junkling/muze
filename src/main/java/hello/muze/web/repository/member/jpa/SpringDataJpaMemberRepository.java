@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface SpringDataJpaMemberRepository extends JpaRepository<Member, Integer> {
-    boolean existsByMemberId(String loginId);
-    boolean existsByNickname(String nickname);
-    boolean existsByEmail(String email);
+//    boolean existsByMemberId(String loginId);
+//    boolean existsByNickname(String nickname);
+//    boolean existsByEmail(String email);
 //
 //    @Query("select m from member m where m.loginId like :loginId")
 //    Optional<Member> findMember(@Param("loginId") String loginId);

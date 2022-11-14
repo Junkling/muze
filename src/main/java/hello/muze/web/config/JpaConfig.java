@@ -1,5 +1,8 @@
 package hello.muze.web.config;
 
+//import hello.muze.web.controller.validator.CheckEmailValidator;
+//import hello.muze.web.controller.validator.CheckMemberIdValidator;
+//import hello.muze.web.controller.validator.CheckNickNameValidator;
 import hello.muze.web.repository.comment.CommentRepository;
 import hello.muze.web.repository.comment.jpa.JpaCommentRepository;
 import hello.muze.web.repository.member.MemberRepository;
@@ -16,7 +19,6 @@ import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.EntityManager;
 
@@ -26,6 +28,11 @@ public class JpaConfig {
     private final SpringDataJpaMemberRepository repository;
     private final EntityManager em;
 
+//    private final CheckMemberIdValidator checkMemberIdValidator;
+//
+//    private CheckEmailValidator checkEmailValidator;
+//
+//    private CheckNickNameValidator checkNickNameValidator;
 
 
     @Bean

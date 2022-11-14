@@ -1,9 +1,6 @@
 package hello.muze.web.controller;
 
 import hello.muze.domain.member.Member;
-import hello.muze.web.validator.CheckEmailValidator;
-import hello.muze.web.validator.CheckMemberIdValidator;
-import hello.muze.web.validator.CheckNickNameValidator;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -25,9 +21,9 @@ import javax.validation.Valid;
 @Slf4j
 public class MemberController {
     private final MemberRepository memberRepository;
-    private final CheckMemberIdValidator checkMemberIdValidator;
-    private final CheckNickNameValidator checkNickNameValidator;
-    private final CheckEmailValidator checkEmailValidator;
+//    private final CheckMemberIdValidator checkMemberIdValidator;
+//    private final CheckNickNameValidator checkNickNameValidator;
+//    private final CheckEmailValidator checkEmailValidator;
 
 
     @GetMapping
@@ -35,12 +31,12 @@ public class MemberController {
         return "users/addForm";
     }
 
-    @InitBinder
-    public void init(WebDataBinder dataBinder) {
-        dataBinder.addValidators(checkMemberIdValidator);
-        dataBinder.addValidators(checkNickNameValidator);
-        dataBinder.addValidators(checkEmailValidator);
-    }
+//    @InitBinder
+//    public void init(WebDataBinder dataBinder) {
+//        dataBinder.addValidators(checkMemberIdValidator);
+//        dataBinder.addValidators(checkNickNameValidator);
+//        dataBinder.addValidators(checkEmailValidator);
+//    }
     @PostMapping
     public String save(@Valid @ModelAttribute Member member, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 

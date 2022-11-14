@@ -1,6 +1,6 @@
 package hello.muze.web.repository.post;
 
-import hello.muze.domain.category.CategoryType;
+//import hello.muze.domain.post.category.CategoryType;
 import lombok.Data;
 
 import javax.persistence.EnumType;
@@ -13,14 +13,14 @@ public class PostUpdateDto {
     private String contents;
     private LocalDateTime updated;
 
-    @Enumerated(EnumType.STRING)
-    private CategoryType categoryName;
+//    @Enumerated(EnumType.STRING)
+//    private CategoryType categoryName;
 
-    public PostUpdateDto(String title, String contents, CategoryType categoryName) {
+    public PostUpdateDto(String title, String contents/**, CategoryType categoryName**/) {
 
         this.title = title;
         this.contents = contents;
-        this.categoryName = categoryName;
+//        this.categoryName = categoryName;
         updated = LocalDateTime.now();
     }
 }
