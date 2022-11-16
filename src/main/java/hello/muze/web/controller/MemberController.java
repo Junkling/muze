@@ -21,6 +21,7 @@ import javax.validation.Valid;
 @Slf4j
 public class MemberController {
     private final MemberRepository memberRepository;
+    private final MemberValidator memberValidator;
 //    private final CheckMemberIdValidator checkMemberIdValidator;
 //    private final CheckNickNameValidator checkNickNameValidator;
 //    private final CheckEmailValidator checkEmailValidator;
@@ -31,7 +32,7 @@ public class MemberController {
         return "users/addForm";
     }
 
-//    @InitBinder
+    //    @InitBinder
 //    public void init(WebDataBinder dataBinder) {
 //        dataBinder.addValidators(checkMemberIdValidator);
 //        dataBinder.addValidators(checkNickNameValidator);
@@ -39,6 +40,8 @@ public class MemberController {
 //    }
     @PostMapping
     public String save(@Valid @ModelAttribute Member member, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+
+        memberValidator.validate(member, bindingResult);
 
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);

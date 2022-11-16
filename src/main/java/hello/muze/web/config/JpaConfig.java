@@ -27,6 +27,7 @@ import javax.persistence.EntityManager;
 public class JpaConfig {
     private final SpringDataJpaMemberRepository repository;
     private final EntityManager em;
+//    private final MemberValidator memberValidator;
 
 //    private final CheckMemberIdValidator checkMemberIdValidator;
 //
