@@ -29,13 +29,15 @@ public class LoginController {
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginForm loginForm, BindingResult bindingResult, @RequestParam(defaultValue = "/") String redirectURL, HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
+            log.info("errors={}", bindingResult);
             return "/login/loginForm";
         }
         Member loginId = loginService.login(loginForm.getLoginId(), loginForm.getPassword());
         if (loginId == null) {
-            bindingResult.reject("loginFailed", "아이디 또는 패스워드가 맞지 않습니다.");
+            bindingResult.reject("loginFail", "아이디 또는 패스워드가 맞지 않습니다.");
             return "/login/loginForm";
         }
+        log.info("memberId={}",loginId);
         HttpSession session = request.getSession();
         session.setAttribute(LONGIN_MEMBER, loginId);
         return "redirect:"+redirectURL;
