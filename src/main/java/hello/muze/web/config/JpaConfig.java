@@ -37,7 +37,7 @@ public class JpaConfig {
 
 
     @Bean
-    public LoginServiceInterface loginService() {
+    public LoginService loginService() {
         return new LoginService(memberRepository());
     }
 

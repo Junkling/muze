@@ -57,31 +57,24 @@ public class JpaPostRepository implements PostRepository {
     @Override
     public List<Post> findPost(PostSearchCond cond) {
         String title = cond.getTitle();
-//        Integer categoryId = cond.getCategoryId();
+        String categoryType = cond.getCategoryType();
         String contents = cond.getContents();
-//        BooleanBuilder categoryDef = new BooleanBuilder(post.categoryId.eq(categoryId));
         List<Post> posts = query
                 .select(post)
                 .from(post)
-                .where()
+                .where(categorySame(categoryType),titleLike(title), contentLike(contents))
                 .fetch();
+
         return posts;
     }
 
-//    @Override
-//    public List<Post> findByCategory(PostSearchCond cond) {
-////        Integer categoryId = cond.getCategoryId();
-//
-//        BooleanBuilder categoryDef = new BooleanBuilder(post.categoryId.eq(categoryId));
-//
-//        List<Post> posts = query
-//                .select(post)
-//                .from(post)
-//                .where(categoryDef)
-//                .fetch();
-//        return posts;
-//    }
 
+    private BooleanExpression categorySame(String categoryType) {
+        if (StringUtils.hasText(categoryType)) {
+            return post.categoryType.like(categoryType);
+        }
+        return null;
+    }
     private BooleanExpression titleLike(String title) {
         if (StringUtils.hasText(title)) {
             return post.title.like("%" + title + "%");

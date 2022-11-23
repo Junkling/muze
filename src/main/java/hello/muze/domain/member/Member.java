@@ -45,10 +45,12 @@ public class Member {
     @Length(min = 2, max = 16,message = "2자리 이상 16자리 이하입니다.")
     private String nickName;
     @NotEmpty(message = "비밀번호를 입력하세요")
-    @Pattern(regexp = "^[a-zA-Z0-9]{4,20}$", message = "비밀번호는 영어와 숫자만 사용하여 4~20자리여야 합니다.")
+//    @Pattern(regexp = "^[a-zA-Z0-9]{4,20}$", message = "비밀번호는 영어와 숫자만 사용하여 4~20자리여야 합니다.")
     private String password;
 
     private String passwordConfirm;
+
+    private String Role;
 
     @NotEmpty(message = "이메일 주소를 입력하세요")
     @Email(message = "이메일 형식이 올바르지 않습니다.")

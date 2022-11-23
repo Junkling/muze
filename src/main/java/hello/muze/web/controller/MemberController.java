@@ -6,6 +6,7 @@ import hello.muze.web.repository.member.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -22,6 +23,8 @@ import javax.validation.Valid;
 public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberValidator memberValidator;
+
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 //    private final CheckMemberIdValidator checkMemberIdValidator;
 //    private final CheckNickNameValidator checkNickNameValidator;
 //    private final CheckEmailValidator checkEmailValidator;
@@ -48,6 +51,10 @@ public class MemberController {
             return "users/addForm";
         }
 
+        member.setRole("ROLE_USER");
+        String rawPassword = member.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        member.setPassword(encPassword);
         memberRepository.save(member);
         /**
          * 이메일 보내는 프로세스 추가

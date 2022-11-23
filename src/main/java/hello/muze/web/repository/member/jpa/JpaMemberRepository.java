@@ -59,11 +59,9 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
 
-
     /**
      * save시 email 확인 프로세스 추가
      */
-
 
 }
 

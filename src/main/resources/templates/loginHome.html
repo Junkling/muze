@@ -38,19 +38,19 @@
   <div class="row">
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg" type="button"
-              th:onclick="|location.href='@{/post/free}'|">
+              th:onclick="|location.href='@{/posts/free}'|">
         자유 게시판
       </button>
     </div>
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg" type="button"
-              th:onclick="|location.href='@{/post/concert}'|">
+              th:onclick="|location.href='@{/posts/concert}'|">
         공연 게시판
       </button>
     </div>
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg" type="button"
-              th:onclick="|location.href='@{/post/trade}'|">
+              th:onclick="|location.href='@{/posts/trade}'|">
         중고거래
       </button>
     </div>
@@ -60,8 +60,8 @@
     <div class="py-5 text-center">
       <h2>🎼음악인을 위한 커뮤니티 Muze</h2>
       <br>
-      <h3>환영합니다.</h3>
-      <h4 class="mb-3" th:text="|${member.nickName}님|">로그인 사용자 이름</h4>
+      <h4 class="mb-3" sec:authentication="name">로그인 사용자 이름</h4>
+      <h3>님 환영합니다.</h3>
     </div>
   </div> <!-- /container -->
   <br>

@@ -24,8 +24,8 @@ public class PostController {
     @ModelAttribute("categoryTypes")
     public List<CategoryType> categoryTypes() {
         List<CategoryType> categoryTypes = new ArrayList<>();
-        categoryTypes.add(new CategoryType("자유게시판", "자유 게시판"));
-        categoryTypes.add(new CategoryType("공연게시판", "공연 게시판"));
+        categoryTypes.add(new CategoryType("자유게시판", "자유게시판"));
+        categoryTypes.add(new CategoryType("공연게시판", "공연게시판"));
         categoryTypes.add(new CategoryType("중고거래", "중고거래"));
         return categoryTypes;
     }

@@ -12,16 +12,16 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LoginService implements LoginServiceInterface, UserDetailsService {
+public class LoginService implements /**LoginServiceInterface,**/ UserDetailsService {
     private final MemberRepository memberRepository;
 
 
-    @Override
-    public Member login(String loginId, String password) {
-        return memberRepository.findByMember(loginId)
-                .filter(m -> m.getPassword().equals(password))
-                .orElse(null);
-    }
+//    @Override
+//    public Member login(String loginId, String password) {
+//        return memberRepository.findByMember(loginId)
+//                .filter(m -> m.getPassword().equals(password))
+//                .orElse(null);
+//    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
