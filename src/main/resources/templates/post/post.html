@@ -11,7 +11,9 @@
     </style>
 </head>
 <body>
-
+<div th:replace="~{/common :: headerFragment}"></div>
+<br/>
+<hr class="my-4">
 
 <div>
 
@@ -25,6 +27,7 @@
                         type="button">게시글 수정
                 </button>
             </div>
+
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
                         onclick="location.href='posts.html'"
@@ -32,6 +35,9 @@
                         type="button">목록으로
                 </button>
             </div>
+
+
+
         </div>
         <hr class="my-4">
         <div>

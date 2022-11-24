@@ -14,13 +14,13 @@ public class PostUpdateDto {
     private LocalDateTime updated;
 
 //    @Enumerated(EnumType.STRING)
-//    private CategoryType categoryName;
+    private String categoryType;
 
-    public PostUpdateDto(String title, String contents/**, CategoryType categoryName**/) {
+    public PostUpdateDto(String title, String contents, String categoryType) {
 
         this.title = title;
         this.contents = contents;
-//        this.categoryName = categoryName;
+        this.categoryType = categoryType;
         updated = LocalDateTime.now();
     }
 }

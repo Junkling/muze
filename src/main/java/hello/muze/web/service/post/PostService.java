@@ -1,46 +1,65 @@
 package hello.muze.web.service.post;
 
+import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
-import hello.muze.web.repository.member.MemberRepository;
-import hello.muze.web.repository.post.PostRepository;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
+import hello.muze.web.repository.post.jpa.PostQueryPostRepository;
+import hello.muze.web.repository.post.jpa.SpringDataJpaPostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class PostService implements PostServiceInterface {
-    private final PostRepository postRepository;
+    private final PostQueryPostRepository postQueryPostRepository;
+    private final SpringDataJpaPostRepository springDataJpaPostRepository;
+
+
 
     @Override
-    public Post save(Post post) {
-        return postRepository.save(post);
+    public Post save(Post post, Member member) {
+        post.setView(0);
+        post.setLikeCount(0);
+        post.setMember(member);
+        return springDataJpaPostRepository.save(post);
     }
 
     @Override
     public void update(Long postId, PostUpdateDto updateParam) {
-        postRepository.update(postId, updateParam);
+        Post findPost = springDataJpaPostRepository.findById(postId).orElseThrow();
+        findPost.setTitle(updateParam.getTitle());
+        findPost.setContents(updateParam.getContents());
+        findPost.setCategoryType(updateParam.getCategoryType());
     }
 
     @Override
     public Optional<Post> findById(Long id) {
-        return postRepository.findById(id);
+        return springDataJpaPostRepository.findById(id);
     }
 
-//    @Override
+    @Override
+    public void delete(Long postId) {
+        springDataJpaPostRepository.delete(
+                springDataJpaPostRepository.findById(postId).orElseThrow(()-> new EntityNotFoundException("게시물이 존재하지 않습니다."))
+        );
+    }
+    //    @Override
 //    public List<Post> findByCategory(PostSearchCond postSearchCond) {
 //        return postRepository.findByCategory(postSearchCond);
 //    }
 
     @Override
     public List<Post> findPost(PostSearchCond postSearchCond) {
-        return postRepository.findPost(postSearchCond);
+        return postQueryPostRepository.findPost(postSearchCond);
     }
 }

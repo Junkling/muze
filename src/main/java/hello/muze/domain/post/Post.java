@@ -37,8 +37,6 @@ public class Post {
     @NotEmpty(message = "내용을 입력해주세요")
     private String contents;
 
-
-    @ColumnDefault("0")
     private Integer view;//조회수
 
     @CreationTimestamp

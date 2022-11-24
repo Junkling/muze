@@ -5,8 +5,15 @@ import hello.muze.domain.post.CategoryType;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
+import hello.muze.web.service.login.PrincipalDetail;
 import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -18,6 +25,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class PostController {
     private final PostServiceInterface postService;
 
@@ -31,7 +39,7 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public String post(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model) {
+    public String post(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault(size=10, sort = "id",direction = Sort.Direction.DESC)Pageable pageable) {
         List<Post> posts = postService.findPost(postSearch);
         model.addAttribute("posts", posts);
         return "/post/posts";
@@ -49,25 +57,35 @@ public class PostController {
     }
 
     @PostMapping("/posts/add")
-    public String addPost(@ModelAttribute Post post, RedirectAttributes redirectAttributes) {
-        Post savedPost = postService.save(post);
+    public String addPost(@ModelAttribute Post post, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        Post savedPost = postService.save(post,principalDetail.getMember());
         redirectAttributes.addAttribute("postId", savedPost.getId());
         redirectAttributes.addAttribute("status", true);
         return "redirect:/post/{postId}";
     }
 
     @GetMapping("/post/{postId}/edit")
-    public String editForm(@PathVariable Long postId, Model model) {
+    public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         Post post = postService.findById(postId).get();
+        if (post.getMember().equals(principalDetail.getMember())) {
         model.addAttribute("post", post);
-        return "/post/editForm";
+            return "/post/editForm";
+        }
+        return "/post/editFail";
     }
 
     @Transactional
     @PostMapping("/post/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
         postService.update(postId, updateParam);
-        return "redirect:/post/posts/{postId}";
+        return "redirect:/post/{postId}";
+    }
+
+    @Transactional
+    @GetMapping("/post/delete/{postId}")
+    public String delete(@PathVariable Long postId) {
+        postService.delete(postId);
+        return "post/delete";
     }
 
 

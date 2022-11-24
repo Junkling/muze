@@ -3,21 +3,19 @@
 <head>
     <meta charset="utf-8">
     <link th:href="@{/css/bootstrap.min.css}"
-          href="../css/bootstrap.min.css" rel="stylesheet">
+          href="css/bootstrap.min.css" rel="stylesheet">
     <style>
- .container {
- max-width: 560px;
- }
- .field-error {
- border-color: #dc3545;
- color: #dc3545;
- }
- </style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
 </head>
 <body>
 <div th:replace="~{/common :: headerFragment}"></div>
+<br/>
 <hr class="my-4">
-
-
+<form action="post.html" th:action method="post">
+    삭제되었습니다.
+</form>
 </body>
 </html>

@@ -11,7 +11,9 @@
     </style>
 </head>
 <body>
-
+<div th:replace="~{/common :: headerFragment}"></div>
+<br/>
+<hr class="my-4">
 <div class="container">
 
     <div class="py-5 text-center">
@@ -20,16 +22,24 @@
 
     <form action="post.html" th:action method="post">
         <div>
-            <label for="categoryId">카테고리 ID</label>
-            <input type="text" id="categoryId" name="category" class="form-categoryId" placeholder="수량을 입력하세요">
+            <label for="id">게시글 번호</label>
+            <input type="text" id="id" name="id" class="form-control"  th:value="${post.id}" readonly>
         </div>
+<!--        <div>-->
+<!--            <div>카테고리</div>-->
+<!--            <select th:field="*{categoryType}" class="form-select">-->
+<!--                <option value="">== 카테고리 선택 ==</option>-->
+<!--                <option th:each="categoryType: ${categoryTypes}" th:value="${categoryType.code}"-->
+<!--                        th:text="${categoryType.displayName}">FREE</option>-->
+<!--            </select>-->
+<!--        </div>-->
         <div>
-            <label for="title">상품명</label>
-            <input type="text" id="title" name="title" class="form-control" placeholder="제목을 입력하세요">
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" class="form-control" th:value="${post.title}">
         </div>
         <div>
             <label for="contents">내용</label>
-            <input type="text" id="contents" name="contents" class="form-control" placeholder="내용을 입력하세요">
+            <input type="text" id="contents" name="contents" class="form-control" th:value="${post.contents}">
         </div>
 
         <hr class="my-4">
@@ -40,9 +50,16 @@
             </div>
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
-                        onclick="location.href='item.html'"
-                        th:onclick="|location.href='@{/items/{itemId}(itemId=${item.id})}'|"
+                        onclick="location.href='posts.html'"
+                        th:onclick="|location.href='@{/post/{postId}(postId=${post.id})}'|"
                         type="button">취소</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-danger"
+                        onclick="location.href='posts.html'"
+                        th:onclick="|location.href='@{/post/delete/{postId}(postId=${post.id})}'|"
+                        type="button">글 삭제
+                </button>
             </div>
         </div>
 

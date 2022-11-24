@@ -11,7 +11,8 @@
     </style>
 </head>
 <body>
-
+<div th:replace="~{/common :: headerFragment}"></div>
+<hr class="my-4">
 <div class="container">
 
     <div class="py-5 text-center">
@@ -19,13 +20,6 @@
     </div>
 
     <form action="post.html" th:action th:object="${post}" method="post">
-<!--        <div>-->
-<!--            <div>카테고리</div>-->
-<!--            <div th:each="type : ${categoryTypes}" class="form-check form-check-inline">-->
-<!--            <input type="radio" th:field="*{categoryType}" th:value="${type.name()}" class="form-check-input">-->
-<!--            <label th:for="${#ids.prev('categoryType')}" th:text="${type.description}" class="form-check-label">FREE</label>-->
-<!--            </div>-->
-<!--        </div>-->
         <div>
             <div>카테고리</div>
             <select th:field="*{categoryType}" class="form-select">
@@ -41,7 +35,7 @@
         </div>
         <div>
             <label for="contents">내용</label>
-            <input type="text" id="contents" th:field="*{contents}" class="form-control" placeholder="내용을 입력하세요">
+            <textarea class="form-control" id="contents" rows="5" th:field="*{contents}" placeholder="내용을 입력하세요"></textarea>
         </div>
 
         <hr class="my-4">
