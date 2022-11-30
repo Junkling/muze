@@ -57,9 +57,10 @@ public class MemberController {
 
 
     @GetMapping("/update")
-    public String update(@ModelAttribute MemberUpdateDto memberUpdateDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    public String update(Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         Integer memberId = principalDetail.getMember().getId();
         log.info("loginId={}", memberId);
+        model.addAttribute("member", principalDetail.getMember());
         return "users/updateForm";
     }
 
@@ -70,9 +71,9 @@ public class MemberController {
         log.info("비밀번호 ={}",memberUpdateDto.getPassword());
         log.info("닉네임 ={}",memberUpdateDto.getNickName());
         log.info("프로필 ={}",memberUpdateDto.getProfile());
-//        String rawPassword = memberUpdateDto.getPassword();
-//        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-//        memberUpdateDto.setPassword(encPassword);
+        String rawPassword = memberUpdateDto.getPassword();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        memberUpdateDto.setPassword(encPassword);
         memberRepository.update(memberId, memberUpdateDto);
         return "redirect:/users/update";
     }
