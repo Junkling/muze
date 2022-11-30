@@ -1,0 +1,82 @@
+<!DOCTYPE HTML>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+ .container {
+ max-width: 560px;
+ }
+ .field-error {
+ border-color: #dc3545;
+ color: #dc3545;
+ }
+ </style>
+</head>
+<body>
+<div th:replace="~{/common :: headerFragment}"></div>
+<hr class="my-4">
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>정보수정</h2>
+    </div>
+    <h4 class="mb-3">회원 정보 입력</h4>
+    <form action="post" th:action th:object="${memberUpdateDto}" method="post">
+
+        <div>
+            <label for="loginId" class="sr-only">로그인 아이디</label>
+            <input type="text" th:value="${#authentication.principal.username}" class="form-control" id="loginId" placeholder="아이디를 입력하세요." required
+                   minlength="4" size="20" readonly>
+<!--            <div class="invalid-feedback" th:if="${#fields.hasErrors('loginId')}" th:errors="*{loginId}">-->
+<!--                중복회원-->
+<!--            </div>-->
+        </div>
+        <div>
+            <label for="password" class="sr-only">비밀번호</label>
+            <input type="password" class="form-control" id="password" placeholder="패스워드를 입력하세요." required
+                   minlength="8" size="20">
+
+
+        <div>
+            <label for="nickName">닉네임 </label>
+            <input type="text" th:value="${#authentication.principal.nickName}" class="form-control" id="nickname" placeholder="닉네임을 입력하세요." required
+                   minlength="4" size="20">
+<!--            <div class="field-error" th:errors="*{nickName}" />-->
+<!--        </div>-->
+        <div>
+            <input type="email" th:value="${#authentication.principal.email}" class="form-control" id="email" placeholder="이메일을 입력하세요." required readonly>
+            <label for="email">이메일</label>
+<!--            <div class="field-error" th:errors="*{email}" />-->
+<!--        </div>-->
+        <div>
+            <label for="profile">내 프로필</label>
+            <input type="text" th:value="${#authentication.principal.profile}" class="form-control" id="profile" placeholder="프로필을 입력하세요." required
+                   minlength="4" size="20">
+<!--            <div class="field-error" th:errors="*{profile}" />-->
+<!--        </div>-->
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-lg btn-success" type="submit">회원수정</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='posts.html'"
+                        th:onclick="|location.href='@{/}'|"
+                        type="button">취소</button>
+            </div>
+            </div>
+        </div>
+    </form>
+    <hr class="my-4">
+
+    <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>Created by Junkling</p>
+        <p>연락처 : 📞010-xxxx-xxxx</p>
+        <p>주소 : 🏠경기도 안양시</p>
+
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

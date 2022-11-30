@@ -28,11 +28,11 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public void update(Integer loginId, MemberUpdateDto updateDto) {
-        Member findId = repository.findById(loginId).orElseThrow();
-        findId.setNickName(updateDto.getNickName());
-        findId.setPassword(updateDto.getPassword());
-        findId.setProfile(updateDto.getProfile());
+    public void update(Integer memberId, MemberUpdateDto memberUpdateDto) {
+        Member findId = repository.findById(memberId).orElseThrow();
+        findId.setNickName(memberUpdateDto.getNickName());
+        findId.setPassword(memberUpdateDto.getPassword());
+        findId.setProfile(memberUpdateDto.getProfile());
     }
 
     @Override

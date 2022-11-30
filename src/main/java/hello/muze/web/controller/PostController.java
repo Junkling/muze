@@ -77,6 +77,8 @@ public class PostController {
     @Transactional
     @PostMapping("/post/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
+        log.info("제목 ={}",updateParam.getTitle());
+
         postService.update(postId, updateParam);
         return "redirect:/post/{postId}";
     }

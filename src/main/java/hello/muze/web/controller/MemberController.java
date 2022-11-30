@@ -3,9 +3,12 @@ package hello.muze.web.controller;
 import hello.muze.domain.member.Member;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.MemberUpdateDto;
+import hello.muze.web.service.login.PrincipalDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,22 +28,12 @@ public class MemberController {
     private final MemberValidator memberValidator;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-//    private final CheckMemberIdValidator checkMemberIdValidator;
-//    private final CheckNickNameValidator checkNickNameValidator;
-//    private final CheckEmailValidator checkEmailValidator;
 
 
     @GetMapping
     public String addForm(@ModelAttribute Member member) {
         return "users/addForm";
     }
-
-    //    @InitBinder
-//    public void init(WebDataBinder dataBinder) {
-//        dataBinder.addValidators(checkMemberIdValidator);
-//        dataBinder.addValidators(checkNickNameValidator);
-//        dataBinder.addValidators(checkEmailValidator);
-//    }
     @PostMapping
     public String save(@Valid @ModelAttribute Member member, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
@@ -62,23 +55,29 @@ public class MemberController {
         return "redirect:/";
     }
 
-    @GetMapping("/{userId}")
-    public String detail(@PathVariable Integer id, Model model) {
-        Member member = memberRepository.findById(id).orElseThrow(() -> {
-            return new IllegalArgumentException("해당사용자는 없습니다");
-        });
-        model.addAttribute("member", member);
-        return "users/detail";
+
+    @GetMapping("/update")
+    public String update(@ModelAttribute MemberUpdateDto memberUpdateDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        Integer memberId = principalDetail.getMember().getId();
+        log.info("loginId={}", memberId);
+        return "users/updateForm";
     }
 
     @Transactional
-    @RequestMapping("/{userId}")
-    public String detail(@PathVariable Integer id, @ModelAttribute MemberUpdateDto memberUpdateDto) {
-        memberRepository.update(id,memberUpdateDto);
-        return "redirect:/users/{userId}";
+    @PostMapping("/update")
+    public String update(@ModelAttribute MemberUpdateDto memberUpdateDto, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
+        Integer memberId = principalDetail.getMember().getId();
+        log.info("비밀번호 ={}",memberUpdateDto.getPassword());
+        log.info("닉네임 ={}",memberUpdateDto.getNickName());
+        log.info("프로필 ={}",memberUpdateDto.getProfile());
+//        String rawPassword = memberUpdateDto.getPassword();
+//        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+//        memberUpdateDto.setPassword(encPassword);
+        memberRepository.update(memberId, memberUpdateDto);
+        return "redirect:/users/update";
     }
 
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/{memberId}")
     public String delete(@PathVariable Integer id) {
         try {
             memberRepository.delete(id);

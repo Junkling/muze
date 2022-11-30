@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 public class PostUpdateDto {
     private String title;
     private String contents;
-    private LocalDateTime updated;
 
 //    @Enumerated(EnumType.STRING)
     private String categoryType;
@@ -21,6 +20,5 @@ public class PostUpdateDto {
         this.title = title;
         this.contents = contents;
         this.categoryType = categoryType;
-        updated = LocalDateTime.now();
     }
 }

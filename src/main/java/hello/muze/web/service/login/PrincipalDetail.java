@@ -43,6 +43,18 @@ public class PrincipalDetail implements UserDetails {
         return member.getLoginId();
     }
 
+
+    public String getNickName() {
+        return member.getNickName();
+    }
+
+    public String getEmail(){
+        return member.getEmail();}
+
+    public String getProfile() {
+        return member.getProfile();
+    }
+
     //계정이 만료되지 않았는지 리턴
     @Override
     public boolean isAccountNonExpired() {

@@ -20,10 +20,19 @@
         <h2>게시글 수정 폼</h2>
     </div>
 
-    <form action="post.html" th:action method="post">
+    <form action="post.html" th:action th:object="${post}" method="post">
         <div>
             <label for="id">게시글 번호</label>
             <input type="text" id="id" name="id" class="form-control"  th:value="${post.id}" readonly>
+        </div>
+
+        <div>
+            <div>카테고리</div>
+            <select th:field="*{categoryType}" class="form-select">
+                <option value="">== 카테고리 선택 ==</option>
+                <option th:each="categoryType: ${categoryTypes}" th:value="${categoryType.code}"
+                        th:text="${categoryType.displayName}">FREE</option>
+            </select>
         </div>
 <!--        <div>-->
 <!--            <div>카테고리</div>-->

@@ -7,7 +7,7 @@ import java.util.*;
 public interface MemberRepository {
     Member save(Member member);
 
-    void update(Integer memberId, MemberUpdateDto updateDto);
+    void update(Integer memberId, MemberUpdateDto memberUpdateDto);
 
     Optional<Member> findById(Integer id);
 
