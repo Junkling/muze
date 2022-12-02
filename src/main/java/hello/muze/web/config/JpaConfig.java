@@ -3,8 +3,7 @@ package hello.muze.web.config;
 //import hello.muze.web.controller.validator.CheckEmailValidator;
 //import hello.muze.web.controller.validator.CheckMemberIdValidator;
 //import hello.muze.web.controller.validator.CheckNickNameValidator;
-import hello.muze.web.repository.comment.CommentRepository;
-import hello.muze.web.repository.comment.jpa.JpaCommentRepository;
+import hello.muze.web.repository.comment.jpa.SpringDataJpaCommentRepository;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.jpa.JpaMemberRepository;
 import hello.muze.web.repository.member.jpa.SpringDataJpaMemberRepository;
@@ -18,7 +17,6 @@ import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.EntityManager;
 
@@ -27,6 +25,7 @@ import javax.persistence.EntityManager;
 public class JpaConfig {
     private final SpringDataJpaMemberRepository memberRepository;
     private final SpringDataJpaPostRepository postRepository;
+    private final SpringDataJpaCommentRepository commentRepository;
     private final EntityManager em;
 
 
@@ -49,11 +48,7 @@ public class JpaConfig {
     }
     @Bean
     public CommentServiceInterface commentService() {
-        return new CommentService(commentRepository());
-    }
-    @Bean
-    public CommentRepository commentRepository() {
-        return new JpaCommentRepository(em);
+        return new CommentService(commentRepository);
     }
 
 

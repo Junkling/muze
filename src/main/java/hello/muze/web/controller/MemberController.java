@@ -6,9 +6,15 @@ import hello.muze.web.repository.member.MemberUpdateDto;
 import hello.muze.web.service.login.PrincipalDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +23,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -28,6 +35,8 @@ public class MemberController {
     private final MemberValidator memberValidator;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private  AuthenticationManager authenticationManager;
 
 
     @GetMapping
@@ -75,7 +84,9 @@ public class MemberController {
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         memberUpdateDto.setPassword(encPassword);
         memberRepository.update(memberId, memberUpdateDto);
-        return "redirect:/users/update";
+        //세션 변경
+
+        return "redirect:/login";
     }
 
     @DeleteMapping("/{memberId}")

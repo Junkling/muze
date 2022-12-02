@@ -1,10 +1,13 @@
 package hello.muze.web.controller;
 
+import hello.muze.domain.comment.Comment;
+import hello.muze.domain.member.Member;
 import hello.muze.domain.post.CategoryType;
 //import hello.muze.domain.post.category.CategoryType;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
+import hello.muze.web.service.comment.CommentServiceInterface;
 import hello.muze.web.service.login.PrincipalDetail;
 import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +20,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +34,7 @@ import java.util.List;
 @Slf4j
 public class PostController {
     private final PostServiceInterface postService;
+    private final CommentServiceInterface commentService;
 
     @ModelAttribute("categoryTypes")
     public List<CategoryType> categoryTypes() {
@@ -45,9 +52,10 @@ public class PostController {
         return "/post/posts";
     }
     @GetMapping("/post/{postId}")
-    public String post(@PathVariable long postId, Model model) {
+    public String post(@PathVariable long postId, Model model, Comment comment) {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
+        model.addAttribute("comment", comment);
         return "/post/post";
     }
     @GetMapping("/posts/add")
@@ -57,8 +65,12 @@ public class PostController {
     }
 
     @PostMapping("/posts/add")
-    public String addPost(@ModelAttribute Post post, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        Post savedPost = postService.save(post,principalDetail.getMember());
+    public String addPost(@Validated @ModelAttribute Post post, RedirectAttributes redirectAttributes, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        if (bindingResult.hasErrors()) {
+            log.info("error={}", bindingResult);
+            return "/post/addForm";
+        }
+        Post savedPost = postService.save(post, principalDetail.getMember());
         redirectAttributes.addAttribute("postId", savedPost.getId());
         redirectAttributes.addAttribute("status", true);
         return "redirect:/post/{postId}";
@@ -90,5 +102,20 @@ public class PostController {
         return "post/delete";
     }
 
+
+    @Transactional
+    @PostMapping("/post/{postId}/comment")
+    public String comment(Comment comment, @AuthenticationPrincipal PrincipalDetail principalDetail,@Valid BindingResult bindingResult, @PathVariable Long postId) {
+        if (bindingResult.hasErrors()) {
+            log.info("error={}", bindingResult);
+            return "post/{postId}";
+        }
+        Post post = postService.findById(postId).orElseThrow();
+        Member member = principalDetail.getMember();
+        commentService.save(comment, member, post);
+        log.info("postId={}", postId);
+        log.info("comment={}", comment.getContents());
+        return "redirect:/post/{postId}";
+    }
 
 }

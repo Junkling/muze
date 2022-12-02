@@ -1,5 +1,6 @@
 package hello.muze.web.service.post;
 
+import hello.muze.domain.comment.Comment;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.post.PostSearchCond;
@@ -46,6 +47,8 @@ public class PostService implements PostServiceInterface {
     public Optional<Post> findById(Long id) {
         return springDataJpaPostRepository.findById(id);
     }
+
+
 
     @Override
     public void delete(Long postId) {

@@ -1,6 +1,7 @@
 package hello.muze.domain.post;
 
 //import hello.muze.domain.post.category.CategoryType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import hello.muze.domain.comment.Comment;
 import hello.muze.domain.member.Member;
 import lombok.Data;
@@ -23,9 +24,13 @@ public class Post {
     @JoinColumn(name = "memberId")
     private Member member;
 
-//    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OrderBy("id desc")
 //    @JoinColumn(name = "commentId")
-//    private List<Comment> comment;
+//    @JsonIgnoreProperties({"post"})
+    private List<Comment> comment;
+
+
 
     @ColumnDefault("0")
     private Integer likeCount;
@@ -45,7 +50,7 @@ public class Post {
     @UpdateTimestamp
     private Timestamp updated;
 
-//    @ColumnDefault("FREE")
+    @ColumnDefault("FREE")
 //    @Enumerated(EnumType.STRING)
     private String categoryType;
     

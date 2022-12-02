@@ -1,5 +1,6 @@
 package hello.muze.domain.comment;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "memberId")
+    @JsonIgnoreProperties({"post"})
     private Member member;
 
     @CreationTimestamp

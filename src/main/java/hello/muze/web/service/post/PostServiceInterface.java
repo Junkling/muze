@@ -1,5 +1,6 @@
 package hello.muze.web.service.post;
 
+import hello.muze.domain.comment.Comment;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.post.PostSearchCond;
