@@ -46,29 +46,31 @@ public class PostController {
     }
 
     @GetMapping("/posts")
-    public String post(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault(size=10, sort = "id",direction = Sort.Direction.DESC)Pageable pageable) {
+    public String post(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         List<Post> posts = postService.findPost(postSearch);
         model.addAttribute("posts", posts);
-        return "/post/posts";
+        return "post/posts";
     }
+
     @GetMapping("/post/{postId}")
     public String post(@PathVariable long postId, Model model, Comment comment) {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
         model.addAttribute("comment", comment);
-        return "/post/post";
+        return "post/post";
     }
+
     @GetMapping("/posts/add")
     public String addForm(Model model) {
         model.addAttribute("post", new Post());
-        return "/post/addForm";
+        return "post/addForm";
     }
 
     @PostMapping("/posts/add")
-    public String addPost(@Validated @ModelAttribute Post post, RedirectAttributes redirectAttributes, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    public String addPost(@Valid @ModelAttribute Post post, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
-            return "/post/addForm";
+            return "post/addForm";
         }
         Post savedPost = postService.save(post, principalDetail.getMember());
         redirectAttributes.addAttribute("postId", savedPost.getId());
@@ -79,17 +81,17 @@ public class PostController {
     @GetMapping("/post/{postId}/edit")
     public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         Post post = postService.findById(postId).get();
-        if (post.getMember().equals(principalDetail.getMember())) {
         model.addAttribute("post", post);
-            return "/post/editForm";
+        if (post.getMember() == null || !post.getMember().equals(principalDetail.getMember())) {
+            return "post/editFail";
         }
-        return "/post/editFail";
+        return "/post/editForm";
     }
 
     @Transactional
     @PostMapping("/post/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
-        log.info("제목 ={}",updateParam.getTitle());
+        log.info("제목 ={}", updateParam.getTitle());
 
         postService.update(postId, updateParam);
         return "redirect:/post/{postId}";
@@ -105,10 +107,11 @@ public class PostController {
 
     @Transactional
     @PostMapping("/post/{postId}/comment")
-    public String comment(Comment comment, @AuthenticationPrincipal PrincipalDetail principalDetail,@Valid BindingResult bindingResult, @PathVariable Long postId) {
+    public String comment(@Valid @ModelAttribute Comment comment, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long postId, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
-            return "post/{postId}";
+            redirectAttributes.addAttribute("commentFail", true);
+            return "redirect:/post/{postId}";
         }
         Post post = postService.findById(postId).orElseThrow();
         Member member = principalDetail.getMember();
@@ -118,4 +121,22 @@ public class PostController {
         return "redirect:/post/{postId}";
     }
 
+    @Transactional
+    @GetMapping("/comment/delete/{commentId}")
+    public String deleteComment(@Valid @ModelAttribute Comment comment, @AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long commentId, RedirectAttributes redirectAttributes) {
+        Comment findComment = commentService.findById(commentId).get();
+        Long postId = findComment.getPost().getId();
+        log.info("댓글 삭제요청={}", findComment);
+
+        if (findComment.getMember() == null || !findComment.getMember().equals(principalDetail.getMember())) {
+            redirectAttributes.addAttribute("commentDeleteFail", true);
+            redirectAttributes.addAttribute("commentId", findComment.getId());
+            return "redirect:/post/"+postId;
+        }
+        commentService.delete(commentId);
+        redirectAttributes.addAttribute("commentDelete", true);
+        redirectAttributes.addAttribute("commentId", findComment.getId());
+        return "redirect:/post/"+postId;
+    }
 }
+

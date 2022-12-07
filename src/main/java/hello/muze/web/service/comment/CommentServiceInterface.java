@@ -15,6 +15,8 @@ public interface CommentServiceInterface {
 
     void update(Long commentId, CommentUpdateDto updateParam);
 
+    void delete(Long commentId);
 
+    Optional<Comment> findById(Long id);
 
 }

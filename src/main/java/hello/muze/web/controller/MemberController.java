@@ -58,9 +58,7 @@ public class MemberController {
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         member.setPassword(encPassword);
         memberRepository.save(member);
-        /**
-         * 이메일 보내는 프로세스 추가
-         */
+
         return "redirect:/";
     }
 

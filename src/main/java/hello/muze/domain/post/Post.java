@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
 import java.util.List;
@@ -26,8 +27,6 @@ public class Post {
 
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     @OrderBy("id desc")
-//    @JoinColumn(name = "commentId")
-//    @JsonIgnoreProperties({"post"})
     private List<Comment> comment;
 
 
@@ -42,6 +41,7 @@ public class Post {
     @NotEmpty(message = "내용을 입력해주세요")
     private String contents;
 
+    @ColumnDefault("0")
     private Integer view;//조회수
 
     @CreationTimestamp
@@ -50,8 +50,7 @@ public class Post {
     @UpdateTimestamp
     private Timestamp updated;
 
-    @ColumnDefault("FREE")
-//    @Enumerated(EnumType.STRING)
+    @NotEmpty(message = "카테고리를 선택해주세요")
     private String categoryType;
     
 }

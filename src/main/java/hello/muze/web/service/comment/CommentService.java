@@ -8,6 +8,9 @@ import hello.muze.web.repository.comment.jpa.SpringDataJpaCommentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CommentService implements CommentServiceInterface {
@@ -26,6 +29,16 @@ public class CommentService implements CommentServiceInterface {
         Comment comment = repository.findById(commentId).orElseThrow();
         comment.setContents(updateParam.getContents());
     }
+    @Override
+    public void delete(Long commentId) {
+        repository.delete(
+                repository.findById(commentId).orElseThrow(()-> new EntityNotFoundException("댓글이 존재하지 않습니다."))
+        );
+    }
 
+    @Override
+    public Optional<Comment> findById(Long id) {
+        return repository.findById(id);
+    }
 
 }

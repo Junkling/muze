@@ -19,7 +19,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+//    @NotEmpty(message = "댓글 내용을 입력해주세요")
     private String contents;
 
     @ManyToOne

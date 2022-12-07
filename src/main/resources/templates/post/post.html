@@ -8,6 +8,7 @@
         .container {
             max-width: 560px;
         }
+
     </style>
 </head>
 <body>
@@ -37,65 +38,66 @@
             </div>
 
 
-
         </div>
         <hr class="my-4">
         <div>
 
             글 번호: <span th:text="${post.id}"></span>
             <br>
-<!--            작성자: <span th:text="${post.memberName}"></span>-->
+            <!--            작성자: <span th:text="${post.memberName}"></span>-->
             카테고리: <span th:text="${post.categoryType}"></span>
         </div>
         <br>
 
-            <!-- 추가 -->
-            <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
+        <!-- 추가 -->
+        <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
 
-            <div>
-                <label for="title">제목</label>
-                <input type="text" id="title" name="title" class="form-control" value="제목 1" th:value="${post.title}"
-                       readonly>
-            </div>
-            <div>
-                <label for="contents">내용</label>
-                <input type="text" id="contents" name="contents" class="form-control" value="내용 1"
-                       th:value="${post.contents}" readonly>
-            </div>
-        <form th:action="@{|/post/${post.id}/comment|}"  th:object="${comment}" method="post">
+        <div>
+            <label for="title">제목</label>
+            <input type="text" id="title" name="title" class="form-control" value="제목 1" th:value="${post.title}"
+                   readonly>
+        </div>
+        <div>
+            <label for="contents">내용</label>
+            <input type="text" id="contents" name="contents" class="form-control" value="내용 1"
+                   th:value="${post.contents}" readonly>
+        </div>
+        <form th:action="@{|/post/${post.id}/comment|}" th:object="${comment}" method="post">
 
-        <hr class="my-4">
+            <hr class="my-4">
             <div class="card">
-                <div class="card-body"><textarea type="text" class="form-control" rows="1" th:field="*{contents}"th:errorclass="field-error"></textarea></divclass>
-                    <div class="field-error" th:errors="*{contents}" />
+                <div class="card-body"><textarea type="text" class="form-control" rows="1" th:field="*{contents}"
+                                                 th:errorclass="field-error"></textarea></divclass>
+                    <div class="field-error" th:errors="*{contents}"/>
                     <div class="card-footer">
                         <button class="btn btn-primary" type="sumit">댓글 작성</button>
                     </div>
+                    <span style="color:red" th:if="${param.commentFail}" th:text="'댓글 내용을 입력하세요'"></span>
                 </div>
             </div>
-        <br/>
+            <br/>
         </form>
+
         <div class="card">
-            <div class="card-header">
-                댓글 리스트
-                <ul id="comment--box" class="list-group">
-                    <tr th:each="comment : ${post.comment}">
-                        <li id="comments--1" class="list-group-item d-flex justify-content-between">
-                            <div th:text="${comment.contents}"></div>
-                            <div class="d-flex">
-                                <div class="font-italic" th:text="${comment.member.nickName}">
+                <div class="card-header">
+                    댓글 리스트
+                    <span style="color:blue" th:if="${param.commentDelete}" th:text="'삭제되었습니다.'"></span>
+                    <span style="color:red" th:if="${param.commentDeleteFail}" th:text="'작성자만 삭제할 수 있습니다.'"></span>
+                    <ul id="comment--box" class="list-group">
+                        <tr th:each="comment : ${post.comment}">
+                            <li id="comments--1" class="list-group-item d-flex justify-content-between">
+                                <div th:text="${comment.contents}"></div>
+                                <div class="d-flex">
+                                    <div class="font-italic" th:text="${comment.member.nickName}">
+                                    </div>
+                                    <button class="badge" th:onclick="|location.href='@{/comment/delete/{commentId}(commentId=${comment.id})}'|" type="button">삭제</button>
                                 </div>
-                                <button class="badge">삭제</button>
-                            </div>
-                        </li>
-                    </tr>
-                </ul>
+                            </li>
+                        </tr>
+                    </ul>
+                </div>
             </div>
-
-        </div>
-
-
-        </div> <!-- /container -->
+    </div> <!-- /container -->
     </div>
 </div>
 </body>

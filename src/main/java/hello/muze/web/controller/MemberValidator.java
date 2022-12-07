@@ -28,7 +28,7 @@ public class MemberValidator implements Validator {
             errors.rejectValue("email","emailUnique","이메일 중복입니다.");
         }
         if (memberRepository.findByNickName(member.getNickName()).orElse(null)!=null) {
-            errors.rejectValue("email","nickNameUnique","닉네임 중복입니다.");
+            errors.rejectValue("nickName","nickNameUnique","닉네임 중복입니다.");
         }
         if (!member.getPassword().equals(member.getPasswordConfirm())) {
             errors.rejectValue("password","confirm","비밀번호가 다릅니다.");
