@@ -22,5 +22,4 @@ public interface PostServiceInterface {
 
     void delete(Long postId);
 
-
 }

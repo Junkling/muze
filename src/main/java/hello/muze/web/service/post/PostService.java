@@ -30,7 +30,7 @@ public class PostService implements PostServiceInterface {
     @Override
     public Post save(Post post, Member member) {
         post.setView(0);
-        post.setLikeCount(0);
+        post.setHeartCount(0);
         post.setMember(member);
         return springDataJpaPostRepository.save(post);
     }
@@ -56,10 +56,6 @@ public class PostService implements PostServiceInterface {
                 springDataJpaPostRepository.findById(postId).orElseThrow(()-> new EntityNotFoundException("게시물이 존재하지 않습니다."))
         );
     }
-    //    @Override
-//    public List<Post> findByCategory(PostSearchCond postSearchCond) {
-//        return postRepository.findByCategory(postSearchCond);
-//    }
 
     @Override
     public List<Post> findPost(PostSearchCond postSearchCond) {

@@ -1,6 +1,10 @@
 package hello.muze.domain.member;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import hello.muze.domain.heart.Heart;
+import hello.muze.domain.post.Post;
 import lombok.Data;
+import org.apache.ibatis.annotations.One;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
@@ -13,6 +17,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 
 //@Entity
 
@@ -51,6 +56,14 @@ public class Member {
     private String passwordConfirm;
 
     private String Role;
+
+    @OneToMany(
+            mappedBy = "member",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    @OrderBy("id desc")
+    private List<Heart> hearts;
 
     @NotEmpty(message = "이메일 주소를 입력하세요")
     @Email(message = "이메일 형식이 올바르지 않습니다.")

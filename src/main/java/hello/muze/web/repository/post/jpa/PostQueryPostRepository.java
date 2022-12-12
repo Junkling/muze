@@ -26,29 +26,6 @@ public class PostQueryPostRepository {
         this.em = em;
         this.query = new JPAQueryFactory(em);
     }
-//
-//    @Override
-//    public Post save(Post post) {
-//        em.persist(post);
-//        return post;
-//    }
-//
-//    @Override
-//    public void update(Long postId, PostUpdateDto updateDto) {
-//        Post findPost = em.find(Post.class,postId);
-//        findPost.setTitle(updateDto.getTitle());
-//        findPost.setContents(updateDto.getContents());
-////        findPost.setCategoryType(updateDto.getCategoryName());
-//    }
-//
-//
-//    @Override
-//    public Optional<Post> findById(Long id) {
-//        Post post = em.find(Post.class, id);
-//        return Optional.ofNullable(post);
-//    }
-//
-//    @Override
     public List<Post> findPost(PostSearchCond cond) {
         String title = cond.getTitle();
         String categoryType = cond.getCategoryType();

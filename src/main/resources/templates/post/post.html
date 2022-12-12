@@ -32,25 +32,35 @@
             <div class="col">
                 <button class="w-100 btn btn-secondary btn-lg"
                         onclick="location.href='posts.html'"
-                        th:onclick="|location.href='@{/posts}'|"
+                        th:onclick="|location.href='@{/posts/list/{categoryType}(categoryType=${post.categoryType})}'|"
                         type="button">목록으로
                 </button>
             </div>
-
-
         </div>
+        <h2 style="color:blue" th:if="${param.status}" th:text="'저장 완료'"></h2>
+
+        <span style="color:red" th:if="${param.authFail}" th:text="'수정권한이 없습니다.'"></span>
         <hr class="my-4">
         <div>
 
             글 번호: <span th:text="${post.id}"></span>
             <br>
-            <!--            작성자: <span th:text="${post.memberName}"></span>-->
+            작성자: <span th:text="${post.member.nickName}"></span>
+            <br>
             카테고리: <span th:text="${post.categoryType}"></span>
         </div>
+
+        <form th:if="${heartCheck==0}" th:action="@{|/post/heart/${post.id}|}" th:object="${heart}" th:method="post">
+        <button class="badge" type="sumit">좋아요</button>
+        </form>
+
+        <form th:if="${heartCheck!=0}" th:action="@{|/post/heart/${post.id}|}" th:object="${heart}" th:method="delete">
+        <button class="badge"type="sumit">좋아요 취소</button>
+        </form>
+        좋아요 <span th:text="${post.heartCount}"></span>
         <br>
 
         <!-- 추가 -->
-        <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>
 
         <div>
             <label for="title">제목</label>

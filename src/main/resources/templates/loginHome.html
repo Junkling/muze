@@ -7,50 +7,26 @@
 </head>
 <body>
 <div th:replace="~{/common :: headerFragment}"></div>
-<!--<nav class="navbar navbar-expand-md bg-dark navbar-dark">-->
-<!--  <a class="navbar-brand" href="/">Muze</a>-->
-<!--  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">-->
-<!--    <span class="navbar-toggler-icon"></span>-->
-<!--  </button>-->
-<!--  <div class="collapse navbar-collapse" id="collapsibleNavbar">-->
-<!--    <ul class="navbar-nav">-->
-<!--      <li class="nav-item">-->
-<!--        <button class="w-100 btn btn-secondary btn-lg" type="button"-->
-<!--                th:onclick="|location.href='@{/users/{id}'|">-->
-<!--          마이페이지-->
-<!--        </button>-->
-<!--      </li>-->
-<!--      <li class="nav item">-->
-<!--        <form th:action="@{/logout}" method="post">-->
-<!--          <button class="w-100 btn btn-dark btn-lg" type="submit">-->
-<!--            로그아웃-->
-<!--          </button>-->
-<!--        </form>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--  </div>-->
-<!--  </ul>-->
-<!--</nav>-->
 <hr class="my-4">
 
 <div class="container" style="max-width: 1500px">
-<hr class="my-4">
+  <hr class="my-4">
   <div class="row">
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg" type="button"
-              th:onclick="|location.href='@{/posts/free}'|">
+              th:onclick="|location.href='@{/posts/list/자유게시판}'|">
         자유 게시판
       </button>
     </div>
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg" type="button"
-              th:onclick="|location.href='@{/posts/concert}'|">
+              th:onclick="|location.href='@{/posts/list/공연게시판}'|">
         공연 게시판
       </button>
     </div>
     <div class="col">
       <button class="w-100 btn btn-secondary btn-lg" type="button"
-              th:onclick="|location.href='@{/posts/trade}'|">
+              th:onclick="|location.href='@{/posts/list/중고거래}'|">
         중고거래
       </button>
     </div>
@@ -60,8 +36,9 @@
     <div class="py-5 text-center">
       <h2>🎼음악인을 위한 커뮤니티 Muze</h2>
       <br>
-      <h4 class="mb-3" sec:authentication="name">로그인 사용자 이름</h4>
-      <h3>님 환영합니다.</h3>
+      <h3 class="mb-3" sec:authorize="!isAuthenticated()">게스트</h3>
+      <h3 class="mb-3" sec:authorize="isAuthenticated()" sec:authentication="principal.nickName">로그인 사용자 이름</h3>
+      <h4>님 환영합니다.</h4>
     </div>
   </div> <!-- /container -->
   <br>
@@ -71,19 +48,34 @@
         <h3>인기 게시물</h3>
         카테고리별 top5
       </div>
-      <div class="col">
+      <div class="col" >
         <h3>내가 저장한 게시물</h3>
-        저장한 게시물 표기
+<!--        <div class="card">-->
+<!--          <div class="card-header">-->
+<!--            댓글 리스트-->
+<!--            <ul id="hearts&#45;&#45;box" class="list-group">-->
+<!--              <tr th:each="hearts : ${principal.hearts}">-->
+<!--                <li id="hearts&#45;&#45;1" class="list-group-item d-flex justify-content-between">-->
+<!--                  <div th:text="${hearts.postId}"></div>-->
+<!--                  <div class="d-flex">-->
+<!--                    <button class="badge" th:onclick="|location.href='@{/post{postId}(postId=${heart.postId})}'|"-->
+<!--                            type="button">보러가기-->
+<!--                    </button>-->
+<!--                  </div>-->
+<!--                </li>-->
+<!--              </tr>-->
+<!--            </ul>-->
+<!--          </div>-->
+<!--        </div>-->
       </div>
-    </div>
-  </div>
-    <hr class="my-4">
+      <hr class="my-4">
 
-    <div class="jumbotron text-center" style="margin-bottom:0">
-      <p>Created by Junkling</p>
-      <p>연락처 : 📞010-xxxx-xxxx</p>
-      <p>주소 : 🏠경기도 안양시</p>
+      <div class="jumbotron text-center" style="margin-bottom:0">
+        <p>Created by Junkling</p>
+        <p>연락처 : 📞010-xxxx-xxxx</p>
+        <p>주소 : 🏠경기도 안양시</p>
 
+      </div>
     </div>
   </div>
 </div>

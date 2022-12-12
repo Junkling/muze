@@ -1,6 +1,7 @@
 package hello.muze.web.controller;
 
 import hello.muze.domain.member.Member;
+import hello.muze.domain.post.Post;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.MemberUpdateDto;
 import hello.muze.web.service.login.PrincipalDetail;
@@ -8,13 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +19,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -36,13 +31,14 @@ public class MemberController {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
 
 
     @GetMapping
     public String addForm(@ModelAttribute Member member) {
         return "users/addForm";
     }
+
     @PostMapping
     public String save(@Valid @ModelAttribute Member member, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
@@ -75,9 +71,9 @@ public class MemberController {
     @PostMapping("/update")
     public String update(@ModelAttribute MemberUpdateDto memberUpdateDto, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
         Integer memberId = principalDetail.getMember().getId();
-        log.info("비밀번호 ={}",memberUpdateDto.getPassword());
-        log.info("닉네임 ={}",memberUpdateDto.getNickName());
-        log.info("프로필 ={}",memberUpdateDto.getProfile());
+        log.info("비밀번호 ={}", memberUpdateDto.getPassword());
+        log.info("닉네임 ={}", memberUpdateDto.getNickName());
+        log.info("프로필 ={}", memberUpdateDto.getProfile());
         String rawPassword = memberUpdateDto.getPassword();
         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
         memberUpdateDto.setPassword(encPassword);

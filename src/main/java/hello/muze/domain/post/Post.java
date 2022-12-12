@@ -30,11 +30,6 @@ public class Post {
     private List<Comment> comment;
 
 
-
-    @ColumnDefault("0")
-    private Integer likeCount;
-
-
     @NotEmpty(message = "제목을 입력해주세요")
     private String title;
     @Lob
@@ -43,6 +38,9 @@ public class Post {
 
     @ColumnDefault("0")
     private Integer view;//조회수
+
+    @ColumnDefault("0")
+    private Integer heartCount;//조회수
 
     @CreationTimestamp
     private Timestamp created;

@@ -1,13 +1,16 @@
 package hello.muze.web.controller;
 
 import hello.muze.domain.comment.Comment;
+import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.CategoryType;
 //import hello.muze.domain.post.category.CategoryType;
 import hello.muze.domain.post.Post;
+import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
 import hello.muze.web.service.comment.CommentServiceInterface;
+import hello.muze.web.service.heart.HeartServiceInterface;
 import hello.muze.web.service.login.PrincipalDetail;
 import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +28,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +41,11 @@ public class PostController {
     private final PostServiceInterface postService;
     private final CommentServiceInterface commentService;
 
+    private final HeartServiceInterface heartService;
+
+
+
+
     @ModelAttribute("categoryTypes")
     public List<CategoryType> categoryTypes() {
         List<CategoryType> categoryTypes = new ArrayList<>();
@@ -45,24 +55,42 @@ public class PostController {
         return categoryTypes;
     }
 
-    @GetMapping("/posts")
-    public String post(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    @GetMapping("/posts/list")
+    public String allList(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        List<Post> posts = postService.findPost(postSearch);
+        model.addAttribute("posts", posts);
+        return "post/posts";
+    }
+
+    @GetMapping("/posts/list/{categoryType}")
+    public String freeList(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PathVariable String categoryType, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        postSearch.setCategoryType(categoryType);
         List<Post> posts = postService.findPost(postSearch);
         model.addAttribute("posts", posts);
         return "post/posts";
     }
 
     @GetMapping("/post/{postId}")
-    public String post(@PathVariable long postId, Model model, Comment comment) {
+    public String post(@PathVariable Long postId, Model model, Comment comment, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
         model.addAttribute("comment", comment);
+
+        if(principalDetail==null){
+            Integer heartCheck = 0;
+            model.addAttribute("heartCheck", heartCheck);
+        }
+        else {
+            Member member = principalDetail.getMember();
+            Integer heartCheck = heartService.heartCheck(postId, member);
+            log.info("Check={}", heartCheck);
+            model.addAttribute("heartCheck", heartCheck);
+        }
         return "post/post";
     }
 
     @GetMapping("/posts/add")
-    public String addForm(Model model) {
-        model.addAttribute("post", new Post());
+    public String addForm(@ModelAttribute Post post) {
         return "post/addForm";
     }
 
@@ -79,11 +107,12 @@ public class PostController {
     }
 
     @GetMapping("/post/{postId}/edit")
-    public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail,RedirectAttributes redirectAttributes) {
         Post post = postService.findById(postId).get();
         model.addAttribute("post", post);
         if (post.getMember() == null || !post.getMember().equals(principalDetail.getMember())) {
-            return "post/editFail";
+            redirectAttributes.addAttribute("authFail", true);
+            return "redirect:/post/{postId}";
         }
         return "/post/editForm";
     }
@@ -104,7 +133,9 @@ public class PostController {
         return "post/delete";
     }
 
-
+    /**
+     * 댓글 기능
+     */
     @Transactional
     @PostMapping("/post/{postId}/comment")
     public String comment(@Valid @ModelAttribute Comment comment, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long postId, RedirectAttributes redirectAttributes) {
@@ -131,12 +162,33 @@ public class PostController {
         if (findComment.getMember() == null || !findComment.getMember().equals(principalDetail.getMember())) {
             redirectAttributes.addAttribute("commentDeleteFail", true);
             redirectAttributes.addAttribute("commentId", findComment.getId());
-            return "redirect:/post/"+postId;
+            return "redirect:/post/" + postId;
         }
         commentService.delete(commentId);
         redirectAttributes.addAttribute("commentDelete", true);
         redirectAttributes.addAttribute("commentId", findComment.getId());
-        return "redirect:/post/"+postId;
+        return "redirect:/post/" + postId;
     }
+
+    /**
+     * 좋아요 기능
+     */
+    @Transactional
+    @PostMapping("/post/heart/{postId}")
+    public String heart(@ModelAttribute Heart heart, @PathVariable Long postId, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
+        log.info("좋아요 요청 아이디={}",principalDetail.getMember().getId());
+        log.info("좋아요 요청 게시물={}",postId);
+        heartService.save(heart, postId, principalDetail.getMember());
+        log.info("좋아요 저장={}",heart.getClass());
+        return "redirect:/post/{postId}";
+    }
+
+    @Transactional
+    @DeleteMapping("/post/heart/{postId}")
+    public String unHeart(@PathVariable Long postId, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
+        heartService.delete(postId, principalDetail.getMember());
+        return "redirect:/post/{postId}";
+    }
+
 }
 

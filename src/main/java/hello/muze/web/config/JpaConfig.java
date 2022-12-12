@@ -4,6 +4,7 @@ package hello.muze.web.config;
 //import hello.muze.web.controller.validator.CheckMemberIdValidator;
 //import hello.muze.web.controller.validator.CheckNickNameValidator;
 import hello.muze.web.repository.comment.jpa.SpringDataJpaCommentRepository;
+import hello.muze.web.repository.heart.HeartRepository;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.jpa.JpaMemberRepository;
 import hello.muze.web.repository.member.jpa.SpringDataJpaMemberRepository;
@@ -11,6 +12,8 @@ import hello.muze.web.repository.post.jpa.PostQueryPostRepository;
 import hello.muze.web.repository.post.jpa.SpringDataJpaPostRepository;
 import hello.muze.web.service.comment.CommentService;
 import hello.muze.web.service.comment.CommentServiceInterface;
+import hello.muze.web.service.heart.HeartService;
+import hello.muze.web.service.heart.HeartServiceInterface;
 import hello.muze.web.service.login.LoginService;
 import hello.muze.web.service.post.PostService;
 import hello.muze.web.service.post.PostServiceInterface;
@@ -26,6 +29,7 @@ public class JpaConfig {
     private final SpringDataJpaMemberRepository memberRepository;
     private final SpringDataJpaPostRepository postRepository;
     private final SpringDataJpaCommentRepository commentRepository;
+    private final HeartRepository heartRepository;
     private final EntityManager em;
 
 
@@ -42,14 +46,21 @@ public class JpaConfig {
     public PostServiceInterface postService() {
         return new PostService(postRepository(),postRepository);
     }
+
     @Bean
     public PostQueryPostRepository postRepository() {
+
         return new PostQueryPostRepository(em);
     }
+
     @Bean
     public CommentServiceInterface commentService() {
         return new CommentService(commentRepository);
     }
 
+    @Bean
+    public HeartServiceInterface heartService() {
+        return new HeartService(postRepository, heartRepository);
+    }
 
 }
