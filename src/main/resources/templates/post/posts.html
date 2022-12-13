@@ -9,10 +9,10 @@
 <div th:replace="~{/common :: headerFragment}"></div>
 <hr class="my-4">
 <div class="container" style="max-width: 600px">
-    <div class="py-5 text-center">
-        <h2>게시글</h2>
-    </div>
     <form th:object="${postSearch}" method="get" class="form-inline">
+    <div class="py-5 text-center">
+        <h2 th:text="*{categoryType}"></h2>
+    </div>
     <div class="row">
         <div class="col">
             <input type="text" th:field="*{title}" class="form-control" placeholder="제목"/>
@@ -30,7 +30,7 @@
                 <button class="btn btn-primary float-end"
                         onclick="location.href='post/addForm.html'"
                         th:onclick="|location.href='@{/posts/add}'|"
-                        type="button">게시글 쓰기
+                        type="button">작성하기
                 </button>
             </div>
         </div>
@@ -61,6 +61,7 @@
         </table>
     </div>
 
+    <div th:replace="~{/common :: footerFragment}"></div>
 
 </div> <!-- /container -->
 

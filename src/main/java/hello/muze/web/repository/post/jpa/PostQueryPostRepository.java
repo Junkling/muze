@@ -38,6 +38,17 @@ public class PostQueryPostRepository {
         return posts;
     }
 
+    public List<Post> hotPost() {
+        List<Post> hotPosts = query
+                .select(post)
+                .from(post)
+                .orderBy(post.heartCount.desc())
+                .offset(0)
+                .limit(5)
+                .fetch();
+        return hotPosts;
+    }
+
 
     private BooleanExpression categorySame(String categoryType) {
         if (StringUtils.hasText(categoryType)) {

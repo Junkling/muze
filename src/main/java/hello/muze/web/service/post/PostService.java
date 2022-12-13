@@ -61,4 +61,9 @@ public class PostService implements PostServiceInterface {
     public List<Post> findPost(PostSearchCond postSearchCond) {
         return postQueryPostRepository.findPost(postSearchCond);
     }
+
+    @Override
+    public List<Post> top5Post() {
+        return postQueryPostRepository.hotPost();
+    }
 }

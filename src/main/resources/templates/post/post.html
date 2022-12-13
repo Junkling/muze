@@ -54,7 +54,7 @@
         <button class="badge" type="sumit">좋아요</button>
         </form>
 
-        <form th:if="${heartCheck!=0}" th:action="@{|/post/heart/${post.id}|}" th:object="${heart}" th:method="delete">
+        <form th:if="${heartCheck==1}" th:action="@{|/post/heart/${post.id}|}" th:object="${heart}" th:method="delete">
         <button class="badge"type="sumit">좋아요 취소</button>
         </form>
         좋아요 <span th:text="${post.heartCount}"></span>
@@ -107,6 +107,7 @@
                     </ul>
                 </div>
             </div>
+        <div th:replace="~{/common :: footerFragment}"></div>
     </div> <!-- /container -->
     </div>
 </div>

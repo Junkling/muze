@@ -20,6 +20,8 @@ public interface PostServiceInterface {
 
     List<Post> findPost(PostSearchCond postSearchCond);
 
+    List<Post> top5Post();
+
     void delete(Long postId);
 
 }

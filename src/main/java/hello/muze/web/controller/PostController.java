@@ -76,11 +76,7 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("comment", comment);
 
-        if(principalDetail==null){
-            Integer heartCheck = 0;
-            model.addAttribute("heartCheck", heartCheck);
-        }
-        else {
+        if(principalDetail!=null){
             Member member = principalDetail.getMember();
             Integer heartCheck = heartService.heartCheck(postId, member);
             log.info("Check={}", heartCheck);
@@ -109,11 +105,13 @@ public class PostController {
     @GetMapping("/post/{postId}/edit")
     public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail,RedirectAttributes redirectAttributes) {
         Post post = postService.findById(postId).get();
-        model.addAttribute("post", post);
-        if (post.getMember() == null || !post.getMember().equals(principalDetail.getMember())) {
+        if (post.getMember() == null || !post.getMember().getId().equals(principalDetail.getMember().getId())) {
+            log.info("게시자={}", post.getMember().getId());
+            log.info("접속자={}", principalDetail.getMember().getId());
             redirectAttributes.addAttribute("authFail", true);
             return "redirect:/post/{postId}";
         }
+        model.addAttribute("post", post);
         return "/post/editForm";
     }
 
@@ -176,10 +174,10 @@ public class PostController {
     @Transactional
     @PostMapping("/post/heart/{postId}")
     public String heart(@ModelAttribute Heart heart, @PathVariable Long postId, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
-        log.info("좋아요 요청 아이디={}",principalDetail.getMember().getId());
-        log.info("좋아요 요청 게시물={}",postId);
+        log.info("좋아요 요청 아이디={}", principalDetail.getMember().getId());
+        log.info("좋아요 요청 게시물={}", postId);
         heartService.save(heart, postId, principalDetail.getMember());
-        log.info("좋아요 저장={}",heart.getClass());
+        log.info("좋아요 저장={}", heart.getClass());
         return "redirect:/post/{postId}";
     }
 

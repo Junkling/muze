@@ -28,10 +28,10 @@ public class HeartService implements HeartServiceInterface {
             throw new IOException("이미 좋아요 표기된 게시물");
         }
         heart.setMember(member);
-        heart.setPostId(postId);
+        Post findPost = postRepository.findById(postId).orElseThrow();
+        heart.setPost(findPost);
         heartRepository.save(heart);
 
-        Post findPost = postRepository.findById(postId).orElseThrow();
         Integer rawHeartCount = findPost.getHeartCount();
         findPost.setHeartCount((rawHeartCount) + 1);
     }
