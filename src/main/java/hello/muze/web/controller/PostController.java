@@ -1,11 +1,15 @@
 package hello.muze.web.controller;
 
+import hello.muze.domain.attachment.Attachment;
+import hello.muze.domain.attachment.AttachmentAddForm;
+import hello.muze.domain.attachment.FileStore;
 import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.CategoryType;
 //import hello.muze.domain.post.category.CategoryType;
 import hello.muze.domain.post.Post;
+import hello.muze.web.repository.attachment.AttachmentRepository;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
@@ -26,12 +30,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Part;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -43,10 +50,13 @@ public class PostController {
 
     private final HeartServiceInterface heartService;
 
+    private final FileStore fileStore;
 
+    private final AttachmentRepository attachmentRepository;
 
 
     @ModelAttribute("categoryTypes")
+
     public List<CategoryType> categoryTypes() {
         List<CategoryType> categoryTypes = new ArrayList<>();
         categoryTypes.add(new CategoryType("자유게시판", "자유게시판"));
@@ -76,7 +86,7 @@ public class PostController {
         model.addAttribute("post", post);
         model.addAttribute("comment", comment);
 
-        if(principalDetail!=null){
+        if (principalDetail != null) {
             Member member = principalDetail.getMember();
             Integer heartCheck = heartService.heartCheck(postId, member);
             log.info("Check={}", heartCheck);
@@ -91,19 +101,28 @@ public class PostController {
     }
 
     @PostMapping("/posts/add")
-    public String addPost(@Valid @ModelAttribute Post post, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    public String addPost(@Valid @ModelAttribute Post post, @ModelAttribute AttachmentAddForm attachmentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail, @RequestParam MultipartFile file) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
             return "post/addForm";
         }
+
+        MultipartFile attachFile = attachmentForm.getAttachFile();
+        List<MultipartFile> imageFiles = attachmentForm.getImageFiles();
+        List<Attachment> attachments = fileStore.storeFiles(imageFiles);
+        attachmentRepository.saveAll(attachments);
+        post.setAttachments(attachments);
+
+        log.info("제목={}", post.getTitle());
         Post savedPost = postService.save(post, principalDetail.getMember());
         redirectAttributes.addAttribute("postId", savedPost.getId());
         redirectAttributes.addAttribute("status", true);
+
         return "redirect:/post/{postId}";
     }
 
     @GetMapping("/post/{postId}/edit")
-    public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail,RedirectAttributes redirectAttributes) {
+    public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
         Post post = postService.findById(postId).get();
         if (post.getMember() == null || !post.getMember().getId().equals(principalDetail.getMember().getId())) {
             log.info("게시자={}", post.getMember().getId());
@@ -125,7 +144,7 @@ public class PostController {
     }
 
     @Transactional
-    @GetMapping("/post/delete/{postId}")
+    @GetMapping("/post/{postId}/delete")
     public String delete(@PathVariable Long postId) {
         postService.delete(postId);
         return "post/delete";

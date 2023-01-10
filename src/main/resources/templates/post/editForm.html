@@ -58,7 +58,7 @@
             <div class="col">
                 <button class="w-100 btn btn-danger"
                         onclick="location.href='posts.html'"
-                        th:onclick="|location.href='@{/post/delete/{postId}(postId=${post.id})}'|"
+                        th:onclick="|location.href='@{/post/{postId}/delete(postId=${post.id})}'|"
                         type="button">글 삭제
                 </button>
             </div>

@@ -2,7 +2,9 @@ package hello.muze.domain.post;
 
 //import hello.muze.domain.post.category.CategoryType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import hello.muze.domain.attachment.Attachment;
 import hello.muze.domain.comment.Comment;
+import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
@@ -28,6 +30,21 @@ public class Post {
     @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
     @OrderBy("id desc")
     private List<Comment> comment;
+
+    @OneToMany(
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    @OrderBy("id desc")
+    private List<Heart> hearts;
+
+    @OneToMany(
+            mappedBy = "post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Attachment> attachments;
 
 
     @NotEmpty(message = "제목을 입력해주세요")
