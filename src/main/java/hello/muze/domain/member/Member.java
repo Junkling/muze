@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.post.Post;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.ibatis.annotations.One;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -26,9 +29,10 @@ import java.util.List;
  */
 @Data
 @Entity
+@ToString(exclude = {"comment"})
 public class Member {
 
-    public Member(){
+    public Member() {
 
     }
 
@@ -40,14 +44,15 @@ public class Member {
         this.profile = profile;
     }
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotEmpty(message = "아이디를 입력하세요")
     @Pattern(regexp = "^[a-z0-9]{4,20}$", message = "아이디는 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.")
     private String loginId;
 
     @NotEmpty(message = "닉네임을 입력하세요")
-    @Length(min = 2, max = 16,message = "2자리 이상 16자리 이하입니다.")
+    @Length(min = 2, max = 16, message = "2자리 이상 16자리 이하입니다.")
     private String nickName;
     @NotEmpty(message = "비밀번호를 입력하세요")
 //    @Pattern(regexp = "^[a-zA-Z0-9]{4,20}$", message = "비밀번호는 영어와 숫자만 사용하여 4~20자리여야 합니다.")
@@ -73,6 +78,4 @@ public class Member {
     private Timestamp created;
     @UpdateTimestamp
     private Timestamp updated;
-
-
 }

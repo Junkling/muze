@@ -87,6 +87,7 @@
             </div>
             <br/>
         </form>
+        <img th:each="image : ${post.attachments}" th:src="|/images/${image.storeName}|" width="200" height="200">
 
         <div class="card">
                 <div class="card-header">

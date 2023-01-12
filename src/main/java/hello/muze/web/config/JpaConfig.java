@@ -3,6 +3,7 @@ package hello.muze.web.config;
 //import hello.muze.web.controller.validator.CheckEmailValidator;
 //import hello.muze.web.controller.validator.CheckMemberIdValidator;
 //import hello.muze.web.controller.validator.CheckNickNameValidator;
+import hello.muze.web.repository.attachment.AttachmentRepository;
 import hello.muze.web.repository.comment.jpa.SpringDataJpaCommentRepository;
 import hello.muze.web.repository.heart.HeartRepository;
 import hello.muze.web.repository.member.MemberRepository;
@@ -12,6 +13,7 @@ import hello.muze.web.repository.post.jpa.PostQueryPostRepository;
 import hello.muze.web.repository.post.jpa.SpringDataJpaPostRepository;
 import hello.muze.web.service.comment.CommentService;
 import hello.muze.web.service.comment.CommentServiceInterface;
+import hello.muze.web.service.fileStore.FileStore;
 import hello.muze.web.service.heart.HeartService;
 import hello.muze.web.service.heart.HeartServiceInterface;
 import hello.muze.web.service.login.LoginService;
@@ -30,8 +32,14 @@ public class JpaConfig {
     private final SpringDataJpaPostRepository postRepository;
     private final SpringDataJpaCommentRepository commentRepository;
     private final HeartRepository heartRepository;
+    private final AttachmentRepository attachmentRepository;
     private final EntityManager em;
 
+
+    @Bean
+    public FileStore fileStore() {
+        return new FileStore(attachmentRepository);
+    }
 
     @Bean
     public LoginService loginService() {

@@ -7,6 +7,7 @@ import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
 import lombok.Data;
+import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,14 +21,18 @@ import java.util.List;
 @Entity
 @Data
 public class Post {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "memberId")
     private Member member;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
     @OrderBy("id desc")
     private List<Comment> comment;
 
@@ -67,5 +72,5 @@ public class Post {
 
     @NotEmpty(message = "카테고리를 선택해주세요")
     private String categoryType;
-    
+
 }

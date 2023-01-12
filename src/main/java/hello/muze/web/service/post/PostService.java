@@ -1,6 +1,5 @@
 package hello.muze.web.service.post;
 
-import hello.muze.domain.comment.Comment;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.post.PostSearchCond;
@@ -8,7 +7,6 @@ import hello.muze.web.repository.post.PostUpdateDto;
 import hello.muze.web.repository.post.jpa.PostQueryPostRepository;
 import hello.muze.web.repository.post.jpa.SpringDataJpaPostRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

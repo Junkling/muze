@@ -23,7 +23,7 @@
         <h2>게시글 등록 폼</h2>
     </div>
 
-    <form action="post.html" th:action th:object="${post}" method="post">
+    <form action="post.html" th:action th:object="${post}" method="post" enctype="multipart/form-data">
         <div>
             <label for="categoryType">카테고리 </label>
             <select th:field="*{categoryType}" id="categoryType" class="form-select" th:errorclass="field-error">
@@ -44,6 +44,10 @@
                 <textarea class="form-control" id="contents" rows="5" th:field="*{contents}"
                           th:errorclass="field-error"></textarea>
                 <div class="field-error" th:errors="*{contents}"/>
+            </div>
+
+            <div>
+            <li>이미지 파일들<input type="file" multiple="multiple" name="imageFiles" th:object="${attachmentForm}"></li>
             </div>
 
             <hr class="my-4">

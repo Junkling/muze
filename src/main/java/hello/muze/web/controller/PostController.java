@@ -2,7 +2,7 @@ package hello.muze.web.controller;
 
 import hello.muze.domain.attachment.Attachment;
 import hello.muze.domain.attachment.AttachmentAddForm;
-import hello.muze.domain.attachment.FileStore;
+import hello.muze.web.service.fileStore.FileStore;
 import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
@@ -10,7 +10,6 @@ import hello.muze.domain.post.CategoryType;
 //import hello.muze.domain.post.category.CategoryType;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.attachment.AttachmentRepository;
-import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
 import hello.muze.web.service.comment.CommentServiceInterface;
@@ -19,7 +18,8 @@ import hello.muze.web.service.login.PrincipalDetail;
 import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -28,17 +28,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.Part;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -51,8 +48,6 @@ public class PostController {
     private final HeartServiceInterface heartService;
 
     private final FileStore fileStore;
-
-    private final AttachmentRepository attachmentRepository;
 
 
     @ModelAttribute("categoryTypes")
@@ -96,27 +91,25 @@ public class PostController {
     }
 
     @GetMapping("/posts/add")
-    public String addForm(@ModelAttribute Post post) {
+    public String addForm(@ModelAttribute Post post, @ModelAttribute AttachmentAddForm attachmentForm) {
         return "post/addForm";
     }
 
     @PostMapping("/posts/add")
-    public String addPost(@Valid @ModelAttribute Post post, @ModelAttribute AttachmentAddForm attachmentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail, @RequestParam MultipartFile file) throws IOException {
+    public String addPost(@Valid @ModelAttribute Post post, @ModelAttribute AttachmentAddForm attachmentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
             return "post/addForm";
         }
 
-        MultipartFile attachFile = attachmentForm.getAttachFile();
-        List<MultipartFile> imageFiles = attachmentForm.getImageFiles();
-        List<Attachment> attachments = fileStore.storeFiles(imageFiles);
-        attachmentRepository.saveAll(attachments);
-        post.setAttachments(attachments);
-
         log.info("제목={}", post.getTitle());
         Post savedPost = postService.save(post, principalDetail.getMember());
         redirectAttributes.addAttribute("postId", savedPost.getId());
         redirectAttributes.addAttribute("status", true);
+
+        List<MultipartFile> imageFiles = attachmentForm.getImageFiles();
+        fileStore.storeFiles(imageFiles, post);
+
 
         return "redirect:/post/{postId}";
     }
@@ -171,12 +164,12 @@ public class PostController {
 
     @Transactional
     @GetMapping("/comment/delete/{commentId}")
-    public String deleteComment(@Valid @ModelAttribute Comment comment, @AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long commentId, RedirectAttributes redirectAttributes) {
+    public String deleteComment(@AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long commentId, RedirectAttributes redirectAttributes) {
         Comment findComment = commentService.findById(commentId).get();
         Long postId = findComment.getPost().getId();
-        log.info("댓글 삭제요청={}", findComment);
+        log.info("댓글 삭제요청={}", findComment.getId());
 
-        if (findComment.getMember() == null || !findComment.getMember().equals(principalDetail.getMember())) {
+        if (findComment.getMember() == null || !findComment.getMember().getId().equals(principalDetail.getMember().getId())) {
             redirectAttributes.addAttribute("commentDeleteFail", true);
             redirectAttributes.addAttribute("commentId", findComment.getId());
             return "redirect:/post/" + postId;
@@ -207,5 +200,10 @@ public class PostController {
         return "redirect:/post/{postId}";
     }
 
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
+    }
 }
 

@@ -1,7 +1,12 @@
-package hello.muze.domain.attachment;
+package hello.muze.web.service.fileStore;
 
+import hello.muze.domain.attachment.Attachment;
+import hello.muze.domain.post.Post;
+import hello.muze.web.repository.attachment.AttachmentRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -10,20 +15,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Component
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class FileStore {
-    @Value("${file.dir}/")
+    private final AttachmentRepository attachmentRepository;
+
+    @Value("${file.dir}")
     private String fileDir;
 
-    public List<Attachment> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
-        List<Attachment> storeFileResult = new ArrayList<>();
+    public void storeFiles(List<MultipartFile> multipartFiles, Post post) throws IOException {
+        List<Attachment> attachments = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
-            if (!multipartFile.isEmpty()) {
+            if (!multipartFiles.isEmpty()) {
                 Attachment attachment = storeFile(multipartFile);
-                storeFileResult.add(attachment);
+                attachment.setPost(post);
+                attachments.add(attachment);
+
+                Attachment saved = attachmentRepository.save(attachment);
+                log.info("이미지파일 ID ={}", saved.getId());
             }
         }
-        return storeFileResult;
     }
 
     public String getFullPath(String fileName) {
@@ -35,8 +47,8 @@ public class FileStore {
             return null;
         }
         String originalFilename = multipartFile.getOriginalFilename();
-
         String storeFileName = createFileName(originalFilename);
+
         multipartFile.transferTo(new File(getFullPath(storeFileName)));
 
         return new Attachment(originalFilename, storeFileName);
@@ -44,13 +56,13 @@ public class FileStore {
 
     private String createFileName(String originalFilename) {
         String uu = UUID.randomUUID().toString();
-        String extracted = extracted(originalFilename);
+        String extracted = extract(originalFilename);
 
         String storeFileName = uu + "." + extracted;
         return storeFileName;
     }
 
-    private String extracted(String originalFilename) {
+    private String extract(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         String ext = originalFilename.substring(pos + 1);
         return ext;

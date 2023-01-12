@@ -4,6 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -23,12 +26,13 @@ public class Comment {
     private String contents;
 
     @ManyToOne
-    @JoinColumn(name="postId")
+    @JoinColumn(name = "postId")
+    @JsonIgnoreProperties({"post"})
     private Post post;
 
     @ManyToOne
     @JoinColumn(name = "memberId")
-    @JsonIgnoreProperties({"post"})
+    @JsonIgnoreProperties({"member"})
     private Member member;
 
     @CreationTimestamp
@@ -36,5 +40,6 @@ public class Comment {
 
     @UpdateTimestamp
     private Timestamp updated;
+
 
 }

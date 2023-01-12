@@ -7,8 +7,10 @@ import javax.persistence.*;
 
 @Data
 @Entity
-
 public class Attachment {
+    public Attachment() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
