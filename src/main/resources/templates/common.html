@@ -15,14 +15,19 @@
 
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
-      <button class="btn btn-secondary mr-2 my-2 my-sm-0" type="button" th:onclick="|location.href='@{/users}'|" sec:authorize="!isAuthenticated()">회원가입</button>
-      <button class="btn btn-dark my-2 my-sm-0" type="button" th:onclick="|location.href='@{/login}'|"  sec:authorize="!isAuthenticated()">로그인</button>
-      <!-- 로그인이 안된 경우  -->
+        <button class="btn btn-secondary mr-2 my-2 my-sm-0" type="button" th:onclick="|location.href='@{/users}'|"
+                sec:authorize="!isAuthenticated()">회원가입
+        </button>
+        <button class="btn btn-dark my-2 my-sm-0" type="button" th:onclick="|location.href='@{/login}'|"
+                sec:authorize="!isAuthenticated()">로그인
+        </button>
+        <!-- 로그인이 안된 경우  -->
 
-      <form class="form-inline my-2 my-lg-0" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
-        <span class="text-white mr-2 mx-2" sec:authentication="name">사용자</span>
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">로그아웃</button>
-      </form>
+        <form class="form-inline my-2 my-lg-0" th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
+          <span class="text-white mr-2 mx-2" sec:authentication="name">사용자</span>
+          <button class="btn btn-secondary my-2 my-sm-0" type="submit">로그아웃</button>
+        </form>
+        <button class="btn btn-secondary my-2 my-sm-0" type="submit" th:onclick="|location.href='@{/users/detail}'|"sec:authorize="isAuthenticated()">마이페이지</button>
       </div>
     </div>
   </nav>
@@ -41,4 +46,4 @@
 </body>
 
 </head>
-</html>
+</head></html>

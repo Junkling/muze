@@ -2,6 +2,7 @@ package hello.muze.web.service.login;
 
 import hello.muze.domain.member.Member;
 import hello.muze.web.repository.member.MemberRepository;
+import hello.muze.web.repository.member.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LoginService implements /**LoginServiceInterface,**/ UserDetailsService {
+public class LoginService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
 
@@ -22,5 +23,4 @@ public class LoginService implements /**LoginServiceInterface,**/ UserDetailsSer
             return new UsernameNotFoundException("해당 사용자를 찾을 수 없습니다. : " + username);});
         return new PrincipalDetail(principal);// 시큐리티의 세션에 유저정보 저장됨
     }
-
 }

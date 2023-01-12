@@ -1,5 +1,6 @@
 package hello.muze.web.config;
 
+import hello.muze.web.argumentresolber.CustomLoginSuccessHandler;
 import hello.muze.web.service.login.LoginService;
 import hello.muze.web.service.login.PrincipalDetail;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity  //스프링시큐리티 필터가 스프링 필터 체인에 등록됨
@@ -42,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/users", "/login", "/posts/list/**", "/logout", "/css/**", "/*.ico", "/error", "/post/{postId}","/image/**")
+                .antMatchers("/", "/users", "/login", "/posts/list/**", "/logout", "/css/**", "/*.ico", "/error", "/post/{postId}", "/image/**")
                 .permitAll()
                 .anyRequest()
 //                .permitAll()
@@ -52,6 +55,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .usernameParameter("loginId")
                 .loginProcessingUrl("/loginProc")
-                .defaultSuccessUrl("/");
+                .successHandler(successHandler())
+//                .defaultSuccessUrl("/")
+                .and()
+                .logout()
+                .logoutSuccessUrl("/");
+
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        return new CustomLoginSuccessHandler("/defaultUrl");
     }
 }

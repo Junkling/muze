@@ -31,7 +31,6 @@ public class JpaMemberRepository implements MemberRepository {
     public void update(Integer memberId, MemberUpdateDto memberUpdateDto) {
         Member findId = repository.findById(memberId).orElseThrow();
         findId.setNickName(memberUpdateDto.getNickName());
-        findId.setPassword(memberUpdateDto.getPassword());
         findId.setProfile(memberUpdateDto.getProfile());
     }
 

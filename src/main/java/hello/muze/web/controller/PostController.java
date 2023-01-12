@@ -116,7 +116,7 @@ public class PostController {
 
     @GetMapping("/post/{postId}/edit")
     public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
-        Post post = postService.findById(postId).get();
+        Post post = postService.findById(postId).orElseThrow();
         if (post.getMember() == null || !post.getMember().getId().equals(principalDetail.getMember().getId())) {
             log.info("게시자={}", post.getMember().getId());
             log.info("접속자={}", principalDetail.getMember().getId());

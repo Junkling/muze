@@ -5,6 +5,7 @@ import hello.muze.web.service.login.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,13 +18,15 @@ import static hello.muze.web.SessionConst.LONGIN_MEMBER;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping()
 public class LoginController {
     private final LoginService loginService;
 
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(HttpServletRequest request) {
+        String referrer = request.getHeader("Referer");
+        request.getSession().setAttribute("prevPage", referrer);
         return "/login/SecurityLoginForm";
     }
-
 }
+

@@ -1,6 +1,7 @@
 package hello.muze.domain.member;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.post.Post;
 import lombok.Data;
@@ -69,6 +70,26 @@ public class Member {
             fetch = FetchType.LAZY)
     @OrderBy("id desc")
     private List<Heart> hearts;
+
+
+    @OneToMany(
+            mappedBy = "member",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    @OrderBy("id desc")
+    private List<Comment> comments;
+
+
+    @OneToMany(
+            mappedBy = "member",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    @OrderBy("id desc")
+    private List<Post> posts;
+
+
 
     @NotEmpty(message = "이메일 주소를 입력하세요")
     @Email(message = "이메일 형식이 올바르지 않습니다.")

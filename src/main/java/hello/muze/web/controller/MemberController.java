@@ -59,28 +59,43 @@ public class MemberController {
     }
 
 
-    @GetMapping("/update")
-    public String update(Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+    @GetMapping("/detail")
+    public String detail(Model model, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         Integer memberId = principalDetail.getMember().getId();
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        model.addAttribute("member",member);
         log.info("loginId={}", memberId);
-        model.addAttribute("member", principalDetail.getMember());
+        return "users/detail";
+    }
+    @GetMapping("/detail/update")
+    public String update(MemberUpdateDto memberUpdateDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        Integer memberId = principalDetail.getMember().getId();
+        Member member = memberRepository.findById(memberId).orElseThrow();
+
+        memberUpdateDto.setNickName(member.getNickName());
+        memberUpdateDto.setProfile(member.getProfile());
+
+        log.info("loginId={}", memberId);
         return "users/updateForm";
     }
 
     @Transactional
-    @PostMapping("/update")
-    public String update(@ModelAttribute MemberUpdateDto memberUpdateDto, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
+    @PostMapping("/detail/update")
+    public String update(@Valid @ModelAttribute MemberUpdateDto memberUpdateDto,BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
+        if (bindingResult.hasErrors()) {
+            log.info("error={}", bindingResult);
+            return "redirect:/users/detail";
+        }
         Integer memberId = principalDetail.getMember().getId();
-        log.info("비밀번호 ={}", memberUpdateDto.getPassword());
+
         log.info("닉네임 ={}", memberUpdateDto.getNickName());
         log.info("프로필 ={}", memberUpdateDto.getProfile());
-        String rawPassword = memberUpdateDto.getPassword();
-        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-        memberUpdateDto.setPassword(encPassword);
-        memberRepository.update(memberId, memberUpdateDto);
-        //세션 변경
+        log.info("비밀번호 ={}", principalDetail.getPassword());
 
-        return "redirect:/login";
+        memberRepository.update(memberId, memberUpdateDto);
+
+
+        return "redirect:/users/detail";
     }
 
     @DeleteMapping("/{memberId}")
@@ -93,5 +108,13 @@ public class MemberController {
 
         return "삭제 완료" + id;
     }
+
+
+    /**
+     * 비밀번호 변경 코드
+     *         String rawPassword = PwChangeDto.getPassword();
+     *         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+     *         PwChangeDto.setPassword(encPassword);
+     */
 }
 
