@@ -156,7 +156,7 @@ public class MemberController {
         String memberId = mailDto.getMemberId();
         Member member = memberRepository.findByMember(memberId).orElseThrow();
 
-        if (memberRepository.findByMemberAndEmail(memberId, memberEmail).orElseThrow() == null) {
+        if (!member.getEmail().equals(memberEmail)) {
             redirectAttributes.addAttribute("checkFail", true);
             return "redirect:/users/sendEmail";
         }
