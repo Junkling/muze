@@ -23,19 +23,43 @@
   </div>
   <h4 class="mb-3">회원 정보 입력</h4>
 
-  <form class = "content" action="pw_auth.me" method="post">
-    <div class="textbox">
-      <input id="text" name=name required="" type="text" />
-      <label for="text">이름</label>
-      <div class="error">이름을 입력하세요  </div>
+  <!--임시 비번 모달-->
+
+  <form th:action th:object="${mailDto}" method="post">
+    <div class="container my-auto">
+      <div class="row">
+        <div class="card z-index-0 fadeIn3 fadeInBottom">
+          <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+            <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+              <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">비밀번호 찾기</h4>
+            </div>
+          </div>
+          <div class="card-body">
+            <p>입력한 이메일로 임시 비밀번호가 전송됩니다.</p>
+            <div class="input-group input-group-outline my-3">
+              <label class="form-label">ID</label>
+              <input type="text" th:value="*{memberId}" th:field="*{memberId}" class="form-control" id="memberId"
+                     name="memberId">
+            </div>
+
+            <div class="input-group input-group-outline my-3">
+              <label class="form-label">가입시 기입한 Email</label>
+              <input type="email" th:value="*{email}" th:field="*{email}" class="form-control" id="email" name="email">
+            </div>
+
+
+            <div class="text-center">
+              <button class="btn bg-gradient-primary w-100 my-4 mb-2"
+                      type="submit">비밀번호 발송
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="textbox">
-      <input id="email" name=email required="/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)?$/i" type="email" />
-      <label for="email">이메일</label>
-      <div class="error">유효하지 않은 이메일주소 입니다  </div>
-    </div><br><br>
-    <input type="submit" id="check" value="비밀번호찾기">
   </form>
+  <button type="button" class="btn btn-link" data-bs-toggle="modal"
+          data-bs-target="#findPw">비밀번호를 잊으셨나요?</button>
 <div th:replace="~{/common :: footerFragment}"></div>
 
 </div> <!-- /container -->

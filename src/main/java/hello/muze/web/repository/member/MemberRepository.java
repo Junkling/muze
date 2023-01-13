@@ -10,14 +10,15 @@ public interface MemberRepository {
 
     void update(Integer memberId, MemberUpdateDto memberUpdateDto);
 
-    void changPW(Integer memberId, PwChangeDto pwChangeDto);
-
     Optional<Member> findById(Integer id);
 
     Optional<Member> findByMember(String loginId);
 
     Optional<Member> findByNickName(String nickName);
     Optional<Member> findByEmail(String email);
+
+
+    Optional<Member> findByMemberAndEmail(String loginId, String email);
 
     void delete(Integer userId);
 }

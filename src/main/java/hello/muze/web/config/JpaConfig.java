@@ -1,8 +1,5 @@
 package hello.muze.web.config;
 
-//import hello.muze.web.controller.validator.CheckEmailValidator;
-//import hello.muze.web.controller.validator.CheckMemberIdValidator;
-//import hello.muze.web.controller.validator.CheckNickNameValidator;
 import hello.muze.web.repository.attachment.AttachmentRepository;
 import hello.muze.web.repository.comment.jpa.SpringDataJpaCommentRepository;
 import hello.muze.web.repository.heart.HeartRepository;
@@ -17,11 +14,14 @@ import hello.muze.web.service.fileStore.FileStore;
 import hello.muze.web.service.heart.HeartService;
 import hello.muze.web.service.heart.HeartServiceInterface;
 import hello.muze.web.service.login.LoginService;
+import hello.muze.web.service.mail.MailService;
 import hello.muze.web.service.post.PostService;
 import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import javax.persistence.EntityManager;
 
@@ -37,6 +37,12 @@ public class JpaConfig {
 
 
     @Bean
+    public MailService mailService(){
+        return new MailService(new JavaMailSenderImpl());
+    }
+
+    @Bean
+
     public FileStore fileStore() {
         return new FileStore(attachmentRepository);
     }
@@ -50,9 +56,10 @@ public class JpaConfig {
     public MemberRepository memberRepository() {
         return new JpaMemberRepository(memberRepository);
     }
+
     @Bean
     public PostServiceInterface postService() {
-        return new PostService(postRepository(),postRepository);
+        return new PostService(postRepository(), postRepository);
     }
 
     @Bean

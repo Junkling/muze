@@ -2,14 +2,17 @@ package hello.muze.web.controller;
 
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
+import hello.muze.web.repository.member.MailDto;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.MemberUpdateDto;
 import hello.muze.web.service.login.PrincipalDetail;
 import hello.muze.web.service.login.PwChangeDto;
+import hello.muze.web.service.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,8 +36,9 @@ public class MemberController {
     private final MemberValidator memberValidator;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
+    private final MailService mailService;
+
 
 
     @GetMapping
@@ -111,6 +115,7 @@ public class MemberController {
     @PostMapping("/detail/changePW")
     public String changPW(@Valid PwChangeDto pwChangeDto, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes, HttpServletRequest request) {
         Integer memberId = principalDetail.getMember().getId();
+        Member member = memberRepository.findById(memberId).orElseThrow();
         String inputPw = pwChangeDto.getOriginalPW();
         boolean matches = bCryptPasswordEncoder.matches(inputPw,principalDetail.getPassword());
         log.info("현재 비밀번호={}", inputPw);
@@ -129,14 +134,44 @@ public class MemberController {
 
 //        비밀번호 변경 코드
         String rawPassword = pwChangeDto.getChangedPW();
-        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-        pwChangeDto.setChangedPW(encPassword);
-        memberRepository.changPW(memberId, pwChangeDto);
+        String encodedPassword = bCryptPasswordEncoder.encode(rawPassword);
+        member.setPassword(encodedPassword);
 
         HttpSession session = request.getSession(false);
         session.invalidate();
 
         return "/users/changePwSuccess";
+    }
+
+    @GetMapping("/sendEmail")
+    public String sendEmailForm(MailDto mailDto) {
+        return "/users/findPw";
+    }
+
+
+    @Transactional
+    @PostMapping("/sendEmail")
+    public String sendEmail(MailDto mailDto, RedirectAttributes redirectAttributes) {
+        String memberEmail = mailDto.getEmail();
+        String memberId = mailDto.getMemberId();
+        Member member = memberRepository.findByMember(memberId).orElseThrow();
+
+        if (memberRepository.findByMemberAndEmail(memberId, memberEmail).orElseThrow() == null) {
+            redirectAttributes.addAttribute("checkFail", true);
+            return "redirect:/users/sendEmail";
+        }
+
+        String rawRandomPW = mailService.updatePassword(memberEmail);
+        String encodePW = bCryptPasswordEncoder.encode(rawRandomPW);
+        member.setPassword(encodePW);
+        log.info("변경 암호화 비밀번호={}",member.getPassword());
+        MailDto dto = mailService.createMailAndChangePassword(memberEmail);
+        dto.setMemberId(mailDto.getMemberId());
+
+
+        mailService.mailSend(dto);
+
+        return "/member/login";
     }
 
 

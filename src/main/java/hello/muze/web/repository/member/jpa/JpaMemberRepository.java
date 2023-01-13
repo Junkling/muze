@@ -35,11 +35,6 @@ public class JpaMemberRepository implements MemberRepository {
         findId.setProfile(memberUpdateDto.getProfile());
     }
 
-    @Override
-    public void changPW(Integer memberId, PwChangeDto pwChangeDto) {
-        Member member = repository.findById(memberId).orElseThrow();
-        member.setPassword(pwChangeDto.getChangedPW());
-    }
 
     @Override
     public Optional<Member> findById(Integer id) {
@@ -57,6 +52,11 @@ public class JpaMemberRepository implements MemberRepository {
     @Override
     public Optional<Member> findByEmail(String email) {
         return repository.findAll().stream().filter(member->member.getEmail().equals(email)).findFirst();
+    }
+
+    @Override
+    public Optional<Member> findByMemberAndEmail(String loginId, String email) {
+        return repository.findAll().stream().filter(member->member.getEmail().equals(email)&&member.getLoginId().equals(loginId)).findFirst();
     }
 
     @Override
