@@ -20,6 +20,7 @@
 <div class="container">
     <div class="py-5 text-center">
         <h2>정보수정</h2>
+        <h3>(변경 후 다시 로그인 하셔야합니다.)</h3>
     </div>
     <h4 class="mb-3">회원 정보 입력</h4>
     <form action="detail.html" th:action th:object="${memberUpdateDto}" method="post">
@@ -44,7 +45,7 @@
                 <div class="col">
                     <button class="w-100 btn btn-secondary btn-lg"
                             onclick="location.href='/'"
-                            th:onclick="|location.href='@{/users/detail}'|"
+                            th:onclick="|location.href='@{/logout}'|"
                             type="button">취소
                     </button>
                 </div>

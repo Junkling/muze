@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+ .container {
+ max-width: 560px;
+ }
+ .field-error {
+ border-color: #dc3545;
+ color: #dc3545;
+ }
+ </style>
+</head>
+<body>
+<div th:replace="~{/common :: headerFragment}"></div>
+<hr class="my-4">
+<div class="container">
+    <div class="py-5 text-center">
+        <h2>비밀번호 변경</h2>
+    </div>
+    <h4 class="mb-3">회원 정보 입력</h4>
+
+    <h5 style="color:blue" th:if="${param.status}" th:text="'변경 완료'"></h5>
+    <h5 style="color:red" th:if="${param.samePW}" th:text="'변경 할 비밀번호가 현재 비밀번호와 같습니다.'"></h5>
+    <h5 style="color:red" th:if="${param.checkFail}" th:text="'변경 할 비밀번호와 비밀번호 체크가 일치하지 않습니다. '"></h5>
+    <h5 style="color:red" th:if="${param.originalFail}" th:text="'현재 비밀번호가 틀렸습니다.'"></h5>
+
+
+    <form action="changePW.html" th:action th:object="${pwChangeDto}" method="post">
+
+        <div>
+            <label for="originalPW">현재 비밀번호 </label>
+            <input type="text" th:field="*{originalPW}"class="form-control" id="originalPW" name="originalPW"
+                   placeholder="현재 비밀번호를 입력하세요." required
+                   minlength="4" size="20">
+            <!--                <div class="field-error" th:errors="*{nickName}"/>-->
+        </div>
+        <div>
+            <label for="changedPW">변경 할 비밀번호 </label>
+            <input type="text" th:field="*{changedPW}"class="form-control" id="changedPW" name="changedPW"
+                   placeholder="변경 할 비밀번호를 입력하세요." required
+                   minlength="4" size="20">
+        </div>
+        <div>
+            <label for="checkChange">비밀번호 체크 </label>
+            <input type="text" th:field="*{checkChange}"class="form-control" id="checkChange" name="checkChange"
+                   placeholder="비밀번호를 한번 더 입력해주세요." required
+                   minlength="4" size="20">
+        </div>
+
+        <hr class="my-4">
+        <div class="row">
+            <div class="col">
+                <button class="w-100 btn btn-lg btn-success" type="submit">회원수정</button>
+            </div>
+            <div class="col">
+                <button class="w-100 btn btn-secondary btn-lg"
+                        onclick="location.href='/detail.html'"
+                        th:onclick="|location.href='@{/users/detail}'|"
+                        type="button">취소
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+</div>
+</form>
+<div th:replace="~{/common :: footerFragment}"></div>
+
+</div> <!-- /container -->
+</body>
+</html>

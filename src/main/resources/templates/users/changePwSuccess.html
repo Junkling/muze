@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html lang="en" class="h-100" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="utf-8">
+  <link th:href="@{/css/bootstrap.min.css}"
+        href="../css/bootstrap.min.css" rel="stylesheet">
+  <style>
+ .container {
+ max-width: 560px;
+ }
+ .field-error {
+ border-color: #dc3545;
+ color: #dc3545;
+ }
+ </style>
+</head>
+<body>
+<div th:replace="~{/common :: headerFragment}"></div>
+<hr class="my-4">
+<div class="container">
+  <div class="py-5 text-center">
+    <h2 style="color:blue" type="text" 비밀번호가 변경되었습니다 다시 로그인 해야 합니다. ></h2>
+  </div>
+    <div class="row">
+      <div class="col">
+        <button class="w-100 btn btn-lg btn-success" th:onclick="|location.href='@{/}'|">홈으로 가기</button>
+      </div>
+    </div>
+<div th:replace="~{/common :: footerFragment}"></div>
+
+</div> <!-- /container -->
+</body>
+</html>

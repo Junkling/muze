@@ -1,10 +1,17 @@
 package hello.muze.web.service.login;
 
+import lombok.Data;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+@Data
 public class PwChangeDto {
+
+    private String originalPW;
+
     @NotEmpty(message = "비밀번호를 입력하세요")
-    @Pattern(regexp = "^[a-zA-Z0-9]{4,20}$", message = "비밀번호는 영어와 숫자만 사용하여 4~20자리여야 합니다.")
-    private String password;
+    private String changedPW;
+
+    private String checkChange;
 }

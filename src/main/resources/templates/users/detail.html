@@ -28,6 +28,12 @@
                             type="button">회원정보 수정
                     </button>
                 </div>
+                <div class="col">
+                    <button class="w-100 btn btn-lg btn-success"
+                            th:onclick="|location.href='@{/users/detail/changePW}'|"
+                            type="button">비밀번호 변경
+                    </button>
+                </div>
             </div>
             <h2 style="color:blue" th:if="${param.status}" th:text="'저장 완료'"></h2>
 

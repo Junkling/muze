@@ -36,6 +36,8 @@ public class HomeController {
             Member principalDetailMember = memberRepository.findById(principalDetail.getMember().getId()).orElseThrow();
 
             log.info("맴버 디테일 로그인 ID={}", principalDetail.getMember().getId());
+            log.info("맴버 디테일 닉네임={}", principalDetail.getMember().getNickName());
+
             model.addAttribute("member", member);
             model.addAttribute("principalDetailMember", principalDetailMember);
             return "loginHome";

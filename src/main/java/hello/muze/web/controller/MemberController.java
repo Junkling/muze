@@ -5,6 +5,7 @@ import hello.muze.domain.post.Post;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.MemberUpdateDto;
 import hello.muze.web.service.login.PrincipalDetail;
+import hello.muze.web.service.login.PwChangeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @Controller
@@ -81,7 +84,7 @@ public class MemberController {
 
     @Transactional
     @PostMapping("/detail/update")
-    public String update(@Valid @ModelAttribute MemberUpdateDto memberUpdateDto,BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
+    public String update(@Valid @ModelAttribute MemberUpdateDto memberUpdateDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
             return "redirect:/users/detail";
@@ -93,10 +96,49 @@ public class MemberController {
         log.info("비밀번호 ={}", principalDetail.getPassword());
 
         memberRepository.update(memberId, memberUpdateDto);
+        HttpSession session = httpServletRequest.getSession(false);
+        session.invalidate();
 
-
-        return "redirect:/users/detail";
+        return "redirect:/";
     }
+
+    @GetMapping("/detail/changePW")
+    public String changPWForm(@ModelAttribute PwChangeDto pwChangeDto,@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        return "/users/changePW";
+    }
+
+    @Transactional
+    @PostMapping("/detail/changePW")
+    public String changPW(@Valid PwChangeDto pwChangeDto, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+        Integer memberId = principalDetail.getMember().getId();
+        String inputPw = pwChangeDto.getOriginalPW();
+        boolean matches = bCryptPasswordEncoder.matches(inputPw,principalDetail.getPassword());
+        log.info("현재 비밀번호={}", inputPw);
+        if(inputPw==null|| matches!=true){
+            redirectAttributes.addAttribute("originalFail", true);
+            return "redirect:/users/detail/changePW";
+        }
+        if (bCryptPasswordEncoder.matches(pwChangeDto.getChangedPW(), principalDetail.getPassword())) {
+            redirectAttributes.addAttribute("samePW", true);
+            return "redirect:/users/detail/changePW";
+        }
+        if(!pwChangeDto.getChangedPW().equals(pwChangeDto.getCheckChange())){
+            redirectAttributes.addAttribute("checkFail", true);
+            return "redirect:/users/detail/changePW";
+        }
+
+//        비밀번호 변경 코드
+        String rawPassword = pwChangeDto.getChangedPW();
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        pwChangeDto.setChangedPW(encPassword);
+        memberRepository.changPW(memberId, pwChangeDto);
+
+        HttpSession session = request.getSession(false);
+        session.invalidate();
+
+        return "/users/changePwSuccess";
+    }
+
 
     @DeleteMapping("/{memberId}")
     public String delete(@PathVariable Integer id) {
@@ -109,12 +151,5 @@ public class MemberController {
         return "삭제 완료" + id;
     }
 
-
-    /**
-     * 비밀번호 변경 코드
-     *         String rawPassword = PwChangeDto.getPassword();
-     *         String encPassword = bCryptPasswordEncoder.encode(rawPassword);
-     *         PwChangeDto.setPassword(encPassword);
-     */
 }
 

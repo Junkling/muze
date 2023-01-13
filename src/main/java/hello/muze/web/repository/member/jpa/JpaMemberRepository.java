@@ -3,6 +3,7 @@ package hello.muze.web.repository.member.jpa;
 import hello.muze.domain.member.Member;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.member.MemberUpdateDto;
+import hello.muze.web.service.login.PwChangeDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +33,12 @@ public class JpaMemberRepository implements MemberRepository {
         Member findId = repository.findById(memberId).orElseThrow();
         findId.setNickName(memberUpdateDto.getNickName());
         findId.setProfile(memberUpdateDto.getProfile());
+    }
+
+    @Override
+    public void changPW(Integer memberId, PwChangeDto pwChangeDto) {
+        Member member = repository.findById(memberId).orElseThrow();
+        member.setPassword(pwChangeDto.getChangedPW());
     }
 
     @Override
