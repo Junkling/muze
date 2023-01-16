@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -135,7 +136,7 @@ public class MemberController {
 //        비밀번호 변경 코드
         String rawPassword = pwChangeDto.getChangedPW();
         String encodedPassword = bCryptPasswordEncoder.encode(rawPassword);
-        member.setPassword(encodedPassword);
+        memberRepository.changePW(member, encodedPassword);
 
         HttpSession session = request.getSession(false);
         session.invalidate();
@@ -144,17 +145,18 @@ public class MemberController {
     }
 
     @GetMapping("/sendEmail")
-    public String sendEmailForm(MailDto mailDto) {
+    public String sendEmailForm(MailDto mailDto, HttpServletRequest request, HttpServletResponse response) {
         return "/users/findPw";
     }
 
 
     @Transactional
     @PostMapping("/sendEmail")
-    public String sendEmail(MailDto mailDto, RedirectAttributes redirectAttributes) {
+    public String sendEmail(Member member, MailDto mailDto, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
+        log.info("변경할 ID={}", mailDto.getLoginId());
         String memberEmail = mailDto.getEmail();
-        String memberId = mailDto.getMemberId();
-        Member member = memberRepository.findByMember(memberId).orElseThrow();
+        String memberId = mailDto.getLoginId();
+        Member findMember = memberRepository.findByMember(memberId).orElseThrow();
 
         if (!member.getEmail().equals(memberEmail)) {
             redirectAttributes.addAttribute("checkFail", true);
@@ -163,15 +165,15 @@ public class MemberController {
 
         String rawRandomPW = mailService.updatePassword(memberEmail);
         String encodePW = bCryptPasswordEncoder.encode(rawRandomPW);
-        member.setPassword(encodePW);
-        log.info("변경 암호화 비밀번호={}",member.getPassword());
-        MailDto dto = mailService.createMailAndChangePassword(memberEmail);
-        dto.setMemberId(mailDto.getMemberId());
+        MailDto dto = mailService.createMailAndChangePassword(memberEmail, rawRandomPW);
+        dto.setLoginId(mailDto.getLoginId());
 
+        memberRepository.changePW(findMember, encodePW);
+        log.info("변경 암호화 비밀번호={}", findMember.getPassword());
 
         mailService.mailSend(dto);
 
-        return "/member/login";
+        return "/users/findPw";
     }
 
 

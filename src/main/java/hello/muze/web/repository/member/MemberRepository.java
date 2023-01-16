@@ -9,12 +9,14 @@ public interface MemberRepository {
     Member save(Member member);
 
     void update(Integer memberId, MemberUpdateDto memberUpdateDto);
+    void changePW(Member member, String newPW);
 
     Optional<Member> findById(Integer id);
 
     Optional<Member> findByMember(String loginId);
 
     Optional<Member> findByNickName(String nickName);
+
     Optional<Member> findByEmail(String email);
 
 

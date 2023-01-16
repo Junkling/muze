@@ -35,6 +35,11 @@ public class JpaMemberRepository implements MemberRepository {
         findId.setProfile(memberUpdateDto.getProfile());
     }
 
+    @Override
+    public void changePW(Member member, String newPW) {
+        member.setPassword(newPW);
+    }
+
 
     @Override
     public Optional<Member> findById(Integer id) {
