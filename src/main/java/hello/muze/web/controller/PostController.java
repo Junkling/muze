@@ -96,7 +96,7 @@ public class PostController {
     }
 
     @PostMapping("/posts/add")
-    public String addPost(@Valid @ModelAttribute Post post, @ModelAttribute AttachmentAddForm attachmentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
+        public String addPost(@Valid @ModelAttribute Post post, @ModelAttribute AttachmentAddForm attachmentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
             return "post/addForm";
@@ -107,9 +107,8 @@ public class PostController {
         redirectAttributes.addAttribute("postId", savedPost.getId());
         redirectAttributes.addAttribute("status", true);
 
-        List<MultipartFile> imageFiles = attachmentForm.getImageFiles();
-        fileStore.storeFiles(imageFiles, post);
-
+            List<MultipartFile> imageFiles = attachmentForm.getImageFiles();
+            fileStore.storeFiles(imageFiles, post);
 
         return "redirect:/post/{postId}";
     }

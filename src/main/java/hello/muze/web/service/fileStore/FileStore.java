@@ -25,15 +25,16 @@ public class FileStore {
     private String fileDir;
 
     public void storeFiles(List<MultipartFile> multipartFiles, Post post) throws IOException {
-        List<Attachment> attachments = new ArrayList<>();
+        List<Attachment> attachments = new ArrayList<Attachment>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFiles.isEmpty()) {
                 Attachment attachment = storeFile(multipartFile);
-                attachment.setPost(post);
-                attachments.add(attachment);
-
-                Attachment saved = attachmentRepository.save(attachment);
-                log.info("이미지파일 ID ={}", saved.getId());
+                if(attachment!=null) {
+                    attachment.setPost(post);
+                    attachments.add(attachment);
+                    Attachment saved = attachmentRepository.save(attachment);
+                    log.info("이미지파일 ID ={}", saved.getId());
+                }
             }
         }
     }

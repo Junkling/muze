@@ -33,7 +33,8 @@ public class PostQueryPostRepository {
         List<Post> posts = query
                 .select(post)
                 .from(post)
-                .where(categorySame(categoryType),titleLike(title), contentLike(contents))
+                .where(categorySame(categoryType), titleLike(title), contentLike(contents))
+                .orderBy(post.id.desc())
                 .fetch();
         return posts;
     }

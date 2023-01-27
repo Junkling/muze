@@ -87,7 +87,6 @@
             </div>
             <br/>
         </form>
-        <img th:each="image : ${post.attachments}" th:src="|/images/${image.storeName}|" width="200" height="200">
 
         <div class="card">
                 <div class="card-header">
@@ -108,6 +107,7 @@
                     </ul>
                 </div>
             </div>
+        <img th:each="image : ${post.attachments}" th:src="|/images/${image.storeName}|" width="200" height="200">
         <div th:replace="~{/common :: footerFragment}"></div>
     </div> <!-- /container -->
     </div>

@@ -171,7 +171,7 @@ public class MemberController {
         memberRepository.changePW(findMember, encodePW);
         log.info("변경 암호화 비밀번호={}", findMember.getPassword());
 
-        mailService.mailSend(dto);
+//        mailService.mailSend(dto);
 
         return "/users/findPw";
     }
