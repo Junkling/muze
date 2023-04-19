@@ -36,13 +36,13 @@
     <div class="py-5 text-center">
       <h2>🎼음악인을 위한 커뮤니티 Muze</h2>
       <br>
-      <h3 class="mb-3" sec:authorize="!isAuthenticated()">게스트</h3>
-      <h3 class="mb-3" sec:authorize="isAuthenticated()" sec:authentication="principal.nickName">로그인 사용자 이름</h3>
-      <h4>님 환영합니다.</h4>
+      <span style = " font-size:2em;  font-weight: bold ;" class="mb-3" sec:authorize="!isAuthenticated()">게스트</span>
+      <span style = " font-size:2em;  font-weight: bold ;" class="mb-3" sec:authorize="isAuthenticated()" sec:authentication="principal.nickName">로그인 사용자 이름</span>
+      <span>님 환영합니다.</span>
     </div>
   </div> <!-- /container -->
   <br>
-  <div class="container" style="max-width: 1000px">
+  <div class="container" style="max-width: 1200px">
     <div class="row">
       <div class="col">
         <h3>인기 게시물</h3>
@@ -59,7 +59,7 @@
             <tr th:each="post : ${topPosts}">
 
               <td><a th:text="${post.categoryType}">카테고리</a></td>
-              <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.title}">제목</a></td>
+              <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.title}"style="color:gray; text-decoration:none;">제목</a></td>
 
             </tr>
             </tbody>
@@ -92,9 +92,11 @@
             </table>
           </div>
       </div>
-      <div th:replace="~{/common :: footerFragment}"></div>
     </div>
   </div>
+  <div class="container" style="max-width: 1500px">
+      <div th:replace="~{/common :: footerFragment}"></div>
+      </div>
 </div>
 </body>
 </html>

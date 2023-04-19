@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Repository
 @RequiredArgsConstructor
 @Transactional
 public class PostService implements PostServiceInterface {

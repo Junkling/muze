@@ -52,9 +52,9 @@
             <tbody>
             <tr th:each="post : ${posts}">
 
-                <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.categoryType}">카테고리</a></td>
-                <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.id}">글 번호</a></td>
-                <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.title}">제목</a></td>
+                <td><a th:text="${post.categoryType}">카테고리</a></td>
+                <td><a th:text="${post.id}">글 번호</a></td>
+                <td><a href="post.html" th:href="@{|/post/${post.id}|}" th:text="${post.title}"style="color:gray; text-decoration:none;">제목</a></td>
 
             </tr>
             </tbody>

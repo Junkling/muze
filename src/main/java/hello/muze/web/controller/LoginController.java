@@ -28,6 +28,7 @@ public class LoginController {
 
     @GetMapping("/login")
     public String loginForm(HttpServletRequest request) {
+
         String referrer = request.getHeader("Referer");
         request.getSession().setAttribute("prevPage", referrer);
         return "/login/SecurityLoginForm";

@@ -7,7 +7,6 @@ import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.CategoryType;
-//import hello.muze.domain.post.category.CategoryType;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.attachment.AttachmentRepository;
 import hello.muze.web.repository.post.PostSearchCond;
