@@ -8,28 +8,28 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Auditable;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.UUID;
+
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChatRoom {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
+public class ChatRoom implements Serializable {
 
-    @ManyToOne
-    @JoinColumn(name = "senderId")
-    private Member sender;
+    private static final long serialVersionUID = 6494678977089006639L;
 
-    @ManyToOne
-    @JoinColumn(name = "receiverId")
-    private Member receiver;
+    private String roomId;
+    private String name;
 
-    public void setSender(Member sender) {
-        this.sender = sender;
+    public static ChatRoom create(String name) {
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.roomId = UUID.randomUUID().toString();
+        chatRoom.name = name;
+        return chatRoom;
     }
-
 }
+
 
 
