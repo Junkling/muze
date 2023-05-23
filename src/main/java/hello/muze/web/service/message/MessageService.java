@@ -1,7 +1,7 @@
 package hello.muze.web.service.message;
 
 import hello.muze.domain.member.Member;
-import hello.muze.domain.mesage.ChatMessage;
+import hello.muze.domain.message.ChatMessage;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.message.MessageRepository;
 import lombok.RequiredArgsConstructor;

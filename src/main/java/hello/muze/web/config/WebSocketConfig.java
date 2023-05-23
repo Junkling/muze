@@ -1,6 +1,8 @@
 package hello.muze.web.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -8,6 +10,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer { // (1)
 
 
@@ -22,5 +25,4 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer { // (1
         registry.addEndpoint("/stomp/chat") // ex ) ws://localhost:9000/stomp/chat
                 .setAllowedOriginPatterns("*").withSockJS();
     }
-
 }

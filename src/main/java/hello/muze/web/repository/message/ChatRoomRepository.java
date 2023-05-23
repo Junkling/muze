@@ -1,9 +1,7 @@
 package hello.muze.web.repository.message;
 
-import hello.muze.domain.mesage.ChatRoom;
-import hello.muze.web.service.message.RedisSubscriber;
+import hello.muze.domain.message.ChatRoom;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
@@ -46,11 +44,11 @@ public class ChatRoomRepository {
     /**
      * 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
      */
-    public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = ChatRoom.create(name);
-        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
-        return chatRoom;
-    }
+//    public ChatRoom createChatRoom(String name) {
+//        ChatRoom chatRoom = ChatRoom.create(name);
+//        opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+//        return chatRoom;
+//    }
 
     /**
      * 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 설정한다.
