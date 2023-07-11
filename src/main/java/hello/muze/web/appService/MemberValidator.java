@@ -1,6 +1,7 @@
-package hello.muze.web.controller;
+package hello.muze.web.appService;
 
-import hello.muze.domain.member.Member;
+import hello.muze.domain.member.MemberRequestDto;
+import hello.muze.domain.member.MemberResponseDto;
 import hello.muze.web.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,12 +16,12 @@ public class MemberValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return Member.class.isAssignableFrom(clazz);
+        return MemberRequestDto.class.isAssignableFrom(clazz);
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        Member member = (Member) target;
+        MemberRequestDto member = (MemberRequestDto) target;
         if (memberRepository.findByMember(member.getLoginId()).orElse(null)!=null) {
             errors.rejectValue("loginId","idUnique","ID 중복입니다.");
         }

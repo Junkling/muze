@@ -1,5 +1,7 @@
 package hello.muze.web.config;
 
+import hello.muze.web.appService.MemberAppService;
+import hello.muze.web.appService.MemberValidator;
 import hello.muze.web.repository.attachment.AttachmentRepository;
 import hello.muze.web.repository.comment.jpa.SpringDataJpaCommentRepository;
 import hello.muze.web.repository.heart.HeartRepository;
@@ -22,6 +24,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.EntityManager;
 
@@ -35,9 +38,9 @@ public class JpaConfig {
     private final AttachmentRepository attachmentRepository;
     private final EntityManager em;
 
-
     @Bean
-    public MailService mailService(){
+
+    public MailService mailService() {
         return new MailService(new JavaMailSenderImpl());
     }
 
@@ -50,6 +53,14 @@ public class JpaConfig {
     @Bean
     public LoginService loginService() {
         return new LoginService(memberRepository());
+    }
+
+    @Bean
+    public MemberAppService memberAppService() {
+        return new MemberAppService(memberRepository());
+    }@Bean
+    public MemberValidator memberValidator() {
+        return new MemberValidator(memberRepository());
     }
 
     @Bean
