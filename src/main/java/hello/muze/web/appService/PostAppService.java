@@ -173,7 +173,6 @@ public class PostAppService {
 
     public String getFileFullPath(String fileName) {
         String fullPath = fileStore.getFullPath(fileName);
-        System.out.println(fullPath);
         return fullPath;
     }
 }

@@ -76,7 +76,7 @@
         </div>
         <br>
         <div>
-            <img th:each="image : ${post.attachments}" th:src="|/images/${attachments}|" width="200" height="200">
+            <img th:each="image : ${post.attachments}" th:src="|/images/${image}|" width="200" height="200">
         </div>
             <form th:action="@{|/post/${post.id}/comment|}" th:object="${commentRequestDto}" method="post">
 
