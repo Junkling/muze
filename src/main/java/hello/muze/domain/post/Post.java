@@ -6,8 +6,7 @@ import hello.muze.domain.attachment.Attachment;
 import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,6 +19,9 @@ import java.util.List;
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

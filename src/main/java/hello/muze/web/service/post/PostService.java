@@ -1,7 +1,9 @@
 package hello.muze.web.service.post;
 
+import hello.muze.domain.attachment.Attachment;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
+import hello.muze.domain.post.PostResponseDto;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
 import hello.muze.web.repository.post.jpa.PostQueryPostRepository;
@@ -42,6 +44,8 @@ public class PostService implements PostServiceInterface {
 
     @Override
     public Optional<Post> findById(Long id) {
+
+
         return springDataJpaPostRepository.findById(id);
     }
 

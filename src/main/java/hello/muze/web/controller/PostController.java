@@ -2,6 +2,11 @@ package hello.muze.web.controller;
 
 import hello.muze.domain.attachment.Attachment;
 import hello.muze.domain.attachment.AttachmentAddForm;
+import hello.muze.domain.comment.CommentRequestDto;
+import hello.muze.domain.heart.HeartRequestDto;
+import hello.muze.domain.post.PostRequestDto;
+import hello.muze.domain.post.PostResponseDto;
+import hello.muze.web.appService.PostAppService;
 import hello.muze.web.service.fileStore.FileStore;
 import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
@@ -41,16 +46,17 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
-    private final PostServiceInterface postService;
-    private final CommentServiceInterface commentService;
+//    private final PostServiceInterface postService;
+//    private final CommentServiceInterface commentService;
+//
+//    private final HeartServiceInterface heartService;
+//
+//    private final FileStore fileStore;
 
-    private final HeartServiceInterface heartService;
-
-    private final FileStore fileStore;
+    private final PostAppService postAppService;
 
 
     @ModelAttribute("categoryTypes")
-
     public List<CategoryType> categoryTypes() {
         List<CategoryType> categoryTypes = new ArrayList<>();
         categoryTypes.add(new CategoryType("자유게시판", "자유게시판"));
@@ -61,28 +67,32 @@ public class PostController {
 
     @GetMapping("/posts/list")
     public String allList(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        List<Post> posts = postService.findPost(postSearch);
-        model.addAttribute("posts", posts);
+//        List<Post> posts = postService.findPost(postSearch);
+        List<PostResponseDto> dtos = postAppService.allList(postSearch);
+        model.addAttribute("posts", dtos);
         return "post/posts";
     }
 
     @GetMapping("/posts/list/{categoryType}")
     public String freeList(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PathVariable String categoryType, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         postSearch.setCategoryType(categoryType);
-        List<Post> posts = postService.findPost(postSearch);
-        model.addAttribute("posts", posts);
+        List<PostResponseDto> dtos = postAppService.allList(postSearch);
+//        List<Post> posts = postService.findPost(postSearch);
+        model.addAttribute("posts", dtos);
         return "post/posts";
     }
 
     @GetMapping("/post/{postId}")
-    public String post(@PathVariable Long postId, Model model, Comment comment, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
-        Post post = postService.findById(postId).get();
-        model.addAttribute("post", post);
-        model.addAttribute("comment", comment);
+    public String post(@PathVariable Long postId, Model model, CommentRequestDto commentRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
+//        Post post = postService.findById(postId).get();
+        PostResponseDto dto = postAppService.findById(postId);
+        model.addAttribute("post", dto);
+        model.addAttribute("commentRequestDto", commentRequestDto);
 
         if (principalDetail != null) {
-            Member member = principalDetail.getMember();
-            Integer heartCheck = heartService.heartCheck(postId, member);
+            Integer memberId = principalDetail.getMember().getId();
+//            Integer heartCheck = heartService.heartCheck(postId, memberId);
+            Integer heartCheck = postAppService.heartCheck(postId, memberId);
             log.info("Check={}", heartCheck);
             model.addAttribute("heartCheck", heartCheck);
         }
@@ -90,38 +100,40 @@ public class PostController {
     }
 
     @GetMapping("/posts/add")
-    public String addForm(@ModelAttribute Post post, @ModelAttribute AttachmentAddForm attachmentForm) {
+    public String addForm(@ModelAttribute PostRequestDto postRequestDto, @ModelAttribute AttachmentAddForm attachmentForm) {
         return "post/addForm";
     }
 
     @PostMapping("/posts/add")
-        public String addPost(@Valid @ModelAttribute Post post, @ModelAttribute AttachmentAddForm attachmentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
+    public String addPost(@Valid @ModelAttribute PostRequestDto postRequestDto, @ModelAttribute AttachmentAddForm attachmentForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
             return "post/addForm";
         }
 
-        log.info("제목={}", post.getTitle());
-        Post savedPost = postService.save(post, principalDetail.getMember());
-        redirectAttributes.addAttribute("postId", savedPost.getId());
+        log.info("제목={}", postRequestDto.getTitle());
+//        Post savedPost = postService.save(post, principalDetail.getMember());
+        PostResponseDto dto = postAppService.savePost(postRequestDto,attachmentForm, principalDetail.getMember().getId());
+        redirectAttributes.addAttribute("postId", dto.getId());
         redirectAttributes.addAttribute("status", true);
 
-            List<MultipartFile> imageFiles = attachmentForm.getImageFiles();
-            fileStore.storeFiles(imageFiles, post);
+//        List<MultipartFile> imageFiles = attachmentForm.getImageFiles();
+//        fileStore.storeFiles(imageFiles, post);
 
         return "redirect:/post/{postId}";
     }
 
     @GetMapping("/post/{postId}/edit")
     public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
-        Post post = postService.findById(postId).orElseThrow();
-        if (post.getMember() == null || !post.getMember().getId().equals(principalDetail.getMember().getId())) {
-            log.info("게시자={}", post.getMember().getId());
+//        Post post = postService.findById(postId).orElseThrow();
+        PostResponseDto dto = postAppService.findById(postId);
+        if (dto.getMemberId() == null || !dto.getMemberId().equals(principalDetail.getMember().getId())) {
+            log.info("게시자={}", dto.getMemberId());
             log.info("접속자={}", principalDetail.getMember().getId());
             redirectAttributes.addAttribute("authFail", true);
             return "redirect:/post/{postId}";
         }
-        model.addAttribute("post", post);
+        model.addAttribute("post", dto);
         return "/post/editForm";
     }
 
@@ -129,15 +141,16 @@ public class PostController {
     @PostMapping("/post/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
         log.info("제목 ={}", updateParam.getTitle());
-
-        postService.update(postId, updateParam);
+//        postService.update(postId, updateParam);
+        postAppService.updatePost(postId,updateParam);
         return "redirect:/post/{postId}";
     }
 
     @Transactional
     @GetMapping("/post/{postId}/delete")
     public String delete(@PathVariable Long postId) {
-        postService.delete(postId);
+//        postService.delete(postId);
+        postAppService.deletePost(postId);
         return "post/delete";
     }
 
@@ -146,36 +159,51 @@ public class PostController {
      */
     @Transactional
     @PostMapping("/post/{postId}/comment")
-    public String comment(@Valid @ModelAttribute Comment comment, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long postId, RedirectAttributes redirectAttributes) {
+    public String comment(@Valid @ModelAttribute CommentRequestDto commentRequestDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long postId, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             log.info("error={}", bindingResult);
             redirectAttributes.addAttribute("commentFail", true);
             return "redirect:/post/{postId}";
         }
-        Post post = postService.findById(postId).orElseThrow();
-        Member member = principalDetail.getMember();
-        commentService.save(comment, member, post);
+//        Post post = postService.findById(postId).orElseThrow();
+//        Member member = principalDetail.getMember();
+//        commentService.save(comment, member, post);
+        Integer memberId = principalDetail.getMember().getId();
+        postAppService.saveComment(postId, memberId, commentRequestDto);
+
         log.info("postId={}", postId);
-        log.info("comment={}", comment.getContents());
+        log.info("comment={}", commentRequestDto.getContents());
+
         return "redirect:/post/{postId}";
     }
 
     @Transactional
     @GetMapping("/comment/delete/{commentId}")
     public String deleteComment(@AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long commentId, RedirectAttributes redirectAttributes) {
-        Comment findComment = commentService.findById(commentId).get();
-        Long postId = findComment.getPost().getId();
-        log.info("댓글 삭제요청={}", findComment.getId());
+//        Comment findComment = commentService.findById(commentId).get();
+//        Long postId = findComment.getPost().getId();
+//        log.info("댓글 삭제요청={}", findComment.getId());
+        Long postId = postAppService.commentPost(commentId);
 
-        if (findComment.getMember() == null || !findComment.getMember().getId().equals(principalDetail.getMember().getId())) {
+        boolean auth = postAppService.deleteCommentAuth(commentId, principalDetail.getMember().getId());
+        if (!auth) {
             redirectAttributes.addAttribute("commentDeleteFail", true);
-            redirectAttributes.addAttribute("commentId", findComment.getId());
+            redirectAttributes.addAttribute("commentId", commentId);
             return "redirect:/post/" + postId;
         }
-        commentService.delete(commentId);
+//        commentService.delete(commentId);
         redirectAttributes.addAttribute("commentDelete", true);
-        redirectAttributes.addAttribute("commentId", findComment.getId());
+        redirectAttributes.addAttribute("commentId", commentId);
         return "redirect:/post/" + postId;
+//        if (findComment.getMember() == null || !findComment.getMember().getId().equals(principalDetail.getMember().getId())) {
+//            redirectAttributes.addAttribute("commentDeleteFail", true);
+//            redirectAttributes.addAttribute("commentId", findComment.getId());
+//            return "redirect:/post/" + postId;
+//        }
+//        commentService.delete(commentId);
+//        redirectAttributes.addAttribute("commentDelete", true);
+//        redirectAttributes.addAttribute("commentId", findComment.getId());
+//        return "redirect:/post/" + postId;
     }
 
     /**
@@ -183,25 +211,26 @@ public class PostController {
      */
     @Transactional
     @PostMapping("/post/heart/{postId}")
-    public String heart(@ModelAttribute Heart heart, @PathVariable Long postId, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
+    public String heart(@PathVariable Long postId, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
         log.info("좋아요 요청 아이디={}", principalDetail.getMember().getId());
         log.info("좋아요 요청 게시물={}", postId);
-        heartService.save(heart, postId, principalDetail.getMember());
-        log.info("좋아요 저장={}", heart.getClass());
+        Integer memberId = principalDetail.getMember().getId();
+//        heartService.save(heart, postId, principalDetail.getMember());
+        postAppService.saveHeart(postId, memberId);
         return "redirect:/post/{postId}";
     }
 
     @Transactional
     @DeleteMapping("/post/heart/{postId}")
     public String unHeart(@PathVariable Long postId, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
-        heartService.delete(postId, principalDetail.getMember());
+//        heartService.delete(postId, principalDetail.getMember());
+        postAppService.deleteHeart(postId, principalDetail.getMember().getId());
         return "redirect:/post/{postId}";
     }
 
     @ResponseBody
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(filename));
+        return new UrlResource("file:" + postAppService.getFileFullPath(filename));
     }
 }
-

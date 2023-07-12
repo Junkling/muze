@@ -5,10 +5,6 @@ import lombok.Data;
 @Data
 public class MessageDto {
     private String contents;
-//
-//    private String senderName;
-//
-//    private String receiverName;
 
     private Integer receiverId;
 

@@ -2,25 +2,30 @@ package hello.muze.domain.post;
 
 import hello.muze.domain.attachment.Attachment;
 import hello.muze.domain.comment.Comment;
+import hello.muze.domain.comment.CommentResponseDto;
 import hello.muze.domain.heart.Heart;
-import hello.muze.domain.member.Member;
+import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.sql.Timestamp;
 import java.util.List;
-
 @Data
-public class PostAddForm {
+@Builder
+public class PostResponseDto {
 
-    private Member member;
+    private Long id;
 
-    private List<MultipartFile> attachments;
+    private Integer memberId;
+
+    private List<String> attachments;
+
+    private List<CommentResponseDto> comment;
+
+    private List<Long> heartsId;
+    private String memberNickName;
 
 
     @NotEmpty(message = "제목을 입력해주세요")

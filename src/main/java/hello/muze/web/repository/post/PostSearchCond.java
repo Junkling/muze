@@ -1,6 +1,7 @@
 package hello.muze.web.repository.post;
 
 //import hello.muze.domain.post.category.CategoryType;
+import hello.muze.domain.post.CategoryType;
 import lombok.Data;
 
 import javax.persistence.*;

@@ -23,13 +23,13 @@
         <h2>게시글 등록 폼</h2>
     </div>
 
-    <form action="post.html" th:action th:object="${post}" method="post" enctype="multipart/form-data">
+    <form action="post.html" th:action th:object="${postRequestDto}" method="post" enctype="multipart/form-data">
         <div>
             <label for="categoryType">카테고리 </label>
             <select th:field="*{categoryType}" id="categoryType" class="form-select" th:errorclass="field-error">
                 <option value="">== 카테고리 선택 ==</option>
-                <option th:each="categoryType: ${categoryTypes}" th:value="${categoryType.code}"
-                        th:text="${categoryType.displayName}">FREE
+                <option th:each="categoryType: ${categoryTypes}" th:value="${categoryType.displayName}"
+                        th:text="${categoryType.code}">FREE
                 </option>
             </select>
             <div class="field-error" th:errors="*{categoryType}"/>

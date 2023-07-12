@@ -2,6 +2,7 @@ package hello.muze.web.config;
 
 import hello.muze.web.appService.MemberAppService;
 import hello.muze.web.appService.MemberValidator;
+import hello.muze.web.appService.PostAppService;
 import hello.muze.web.repository.attachment.AttachmentRepository;
 import hello.muze.web.repository.comment.jpa.SpringDataJpaCommentRepository;
 import hello.muze.web.repository.heart.HeartRepository;
@@ -39,6 +40,10 @@ public class JpaConfig {
     private final EntityManager em;
 
     @Bean
+    public PostAppService postAppService() {
+        return new PostAppService(memberRepository(), postService(), commentService(), heartService(), fileStore());
+    }
+    @Bean
 
     public MailService mailService() {
         return new MailService(new JavaMailSenderImpl());
@@ -58,7 +63,8 @@ public class JpaConfig {
     @Bean
     public MemberAppService memberAppService() {
         return new MemberAppService(memberRepository());
-    }@Bean
+    }
+    @Bean
     public MemberValidator memberValidator() {
         return new MemberValidator(memberRepository());
     }

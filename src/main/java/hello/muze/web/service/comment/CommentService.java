@@ -1,6 +1,7 @@
 package hello.muze.web.service.comment;
 
 import hello.muze.domain.comment.Comment;
+import hello.muze.domain.comment.CommentRequestDto;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.comment.CommentUpdateDto;
@@ -18,9 +19,12 @@ public class CommentService implements CommentServiceInterface {
     private final SpringDataJpaCommentRepository repository;
 
     @Override
-    public Comment save(Comment comment, Member member, Post post) {
+    public Comment save(CommentRequestDto dto, Member member, Post post) {
+        Comment comment = new Comment();
         comment.setMember(member);
         comment.setPost(post);
+        comment.setContents(dto.getContents());
+
         return repository.save(comment);
     }
 
