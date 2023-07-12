@@ -43,7 +43,7 @@ public class PostAppService {
     static void mapToIdList(Post p, PostResponseDto dto) {
         List<Comment> comment = p.getComment();
         List<CommentResponseDto> commentList = new ArrayList<>();
-        if (!comment.isEmpty() && comment != null) {
+        if (comment != null) {
             for (Comment c : comment) {
                 CommentResponseDto commentResponseDto = CommentResponseDto.builder()
                         .id(c.getId())
@@ -59,7 +59,7 @@ public class PostAppService {
 
         List<Heart> hearts = p.getHearts();
         List<Long> heartList = new ArrayList<>();
-        if (!hearts.isEmpty() && hearts != null) {
+        if (hearts != null) {
             for (Heart h : hearts) {
                 heartList.add(h.getId());
             }
@@ -68,7 +68,7 @@ public class PostAppService {
 
         List<Attachment> attachments = p.getAttachments();
         List<String> attachmentList = new ArrayList<>();
-        if (attachments.isEmpty() && attachments != null) {
+        if (attachments != null) {
             for (Attachment a : attachments) {
                 attachmentList.add(a.getStoreName());
             }
@@ -125,6 +125,7 @@ public class PostAppService {
         List<MultipartFile> imageFiles = attachmentAddForm.getImageFiles();
         fileStore.storeFiles(imageFiles, save);
 
+
         PostResponseDto dto = entityToDto(save);
         return dto;
     }
@@ -171,6 +172,8 @@ public class PostAppService {
     }
 
     public String getFileFullPath(String fileName) {
-        return fileStore.getFullPath(fileName);
+        String fullPath = fileStore.getFullPath(fileName);
+        System.out.println(fullPath);
+        return fullPath;
     }
 }
