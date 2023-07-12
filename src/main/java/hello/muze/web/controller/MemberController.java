@@ -79,9 +79,6 @@ public class MemberController {
     public String update(MemberUpdateDto memberUpdateDto, @AuthenticationPrincipal PrincipalDetail principalDetail) {
         Integer memberId = principalDetail.getMember().getId();
         MemberResponseDto dto= memberAppService.findById(memberId);
-//
-//        memberUpdateDto.setNickName(member.getNickName());
-//        memberUpdateDto.setProfile(member.getProfile());
 
         log.info("loginId={}", memberId);
         return "users/updateForm";

@@ -6,7 +6,6 @@ import hello.muze.domain.comment.Comment;
 import hello.muze.domain.comment.CommentRequestDto;
 import hello.muze.domain.comment.CommentResponseDto;
 import hello.muze.domain.heart.Heart;
-import hello.muze.domain.heart.HeartRequestDto;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
 import hello.muze.domain.post.PostRequestDto;
@@ -14,15 +13,10 @@ import hello.muze.domain.post.PostResponseDto;
 import hello.muze.web.repository.member.MemberRepository;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
-import hello.muze.web.service.comment.CommentService;
 import hello.muze.web.service.comment.CommentServiceInterface;
 import hello.muze.web.service.fileStore.FileStore;
-import hello.muze.web.service.heart.HeartService;
 import hello.muze.web.service.heart.HeartServiceInterface;
-import hello.muze.web.service.post.PostService;
 import hello.muze.web.service.post.PostServiceInterface;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +34,7 @@ public class PostAppService {
     private final HeartServiceInterface heartService;
     private final FileStore fileStore;
 
-    static void mapToIdList(Post p, PostResponseDto dto) {
+    static void listMapper(Post p, PostResponseDto dto) {
         List<Comment> comment = p.getComment();
         List<CommentResponseDto> commentList = new ArrayList<>();
         if (comment != null) {
@@ -87,7 +81,7 @@ public class PostAppService {
                 .categoryType(p.getCategoryType())
                 .memberId(p.getMember().getId())
                 .build();
-        mapToIdList(p, dto);
+        listMapper(p, dto);
         return dto;
     }
 

@@ -46,12 +46,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
-//    private final PostServiceInterface postService;
-//    private final CommentServiceInterface commentService;
-//
-//    private final HeartServiceInterface heartService;
-//
-//    private final FileStore fileStore;
 
     private final PostAppService postAppService;
 
@@ -67,7 +61,6 @@ public class PostController {
 
     @GetMapping("/posts/list")
     public String allList(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-//        List<Post> posts = postService.findPost(postSearch);
         List<PostResponseDto> dtos = postAppService.allList(postSearch);
         model.addAttribute("posts", dtos);
         return "post/posts";
@@ -77,21 +70,18 @@ public class PostController {
     public String freeList(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PathVariable String categoryType, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         postSearch.setCategoryType(categoryType);
         List<PostResponseDto> dtos = postAppService.allList(postSearch);
-//        List<Post> posts = postService.findPost(postSearch);
         model.addAttribute("posts", dtos);
         return "post/posts";
     }
 
     @GetMapping("/post/{postId}")
     public String post(@PathVariable Long postId, Model model, CommentRequestDto commentRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
-//        Post post = postService.findById(postId).get();
         PostResponseDto dto = postAppService.findById(postId);
         model.addAttribute("post", dto);
         model.addAttribute("commentRequestDto", commentRequestDto);
 
         if (principalDetail != null) {
             Integer memberId = principalDetail.getMember().getId();
-//            Integer heartCheck = heartService.heartCheck(postId, memberId);
             Integer heartCheck = postAppService.heartCheck(postId, memberId);
             log.info("Check={}", heartCheck);
             model.addAttribute("heartCheck", heartCheck);
@@ -112,20 +102,15 @@ public class PostController {
         }
 
         log.info("제목={}", postRequestDto.getTitle());
-//        Post savedPost = postService.save(post, principalDetail.getMember());
         PostResponseDto dto = postAppService.savePost(postRequestDto,attachmentForm, principalDetail.getMember().getId());
         redirectAttributes.addAttribute("postId", dto.getId());
         redirectAttributes.addAttribute("status", true);
-
-//        List<MultipartFile> imageFiles = attachmentForm.getImageFiles();
-//        fileStore.storeFiles(imageFiles, post);
 
         return "redirect:/post/{postId}";
     }
 
     @GetMapping("/post/{postId}/edit")
     public String editForm(@PathVariable Long postId, Model model, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes) {
-//        Post post = postService.findById(postId).orElseThrow();
         PostResponseDto dto = postAppService.findById(postId);
         if (dto.getMemberId() == null || !dto.getMemberId().equals(principalDetail.getMember().getId())) {
             log.info("게시자={}", dto.getMemberId());
@@ -141,7 +126,6 @@ public class PostController {
     @PostMapping("/post/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
         log.info("제목 ={}", updateParam.getTitle());
-//        postService.update(postId, updateParam);
         postAppService.updatePost(postId,updateParam);
         return "redirect:/post/{postId}";
     }
@@ -149,7 +133,6 @@ public class PostController {
     @Transactional
     @GetMapping("/post/{postId}/delete")
     public String delete(@PathVariable Long postId) {
-//        postService.delete(postId);
         postAppService.deletePost(postId);
         return "post/delete";
     }
@@ -165,9 +148,6 @@ public class PostController {
             redirectAttributes.addAttribute("commentFail", true);
             return "redirect:/post/{postId}";
         }
-//        Post post = postService.findById(postId).orElseThrow();
-//        Member member = principalDetail.getMember();
-//        commentService.save(comment, member, post);
         Integer memberId = principalDetail.getMember().getId();
         postAppService.saveComment(postId, memberId, commentRequestDto);
 
@@ -180,9 +160,6 @@ public class PostController {
     @Transactional
     @GetMapping("/comment/delete/{commentId}")
     public String deleteComment(@AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long commentId, RedirectAttributes redirectAttributes) {
-//        Comment findComment = commentService.findById(commentId).get();
-//        Long postId = findComment.getPost().getId();
-//        log.info("댓글 삭제요청={}", findComment.getId());
         Long postId = postAppService.commentPost(commentId);
 
         boolean auth = postAppService.deleteCommentAuth(commentId, principalDetail.getMember().getId());
@@ -191,19 +168,9 @@ public class PostController {
             redirectAttributes.addAttribute("commentId", commentId);
             return "redirect:/post/" + postId;
         }
-//        commentService.delete(commentId);
         redirectAttributes.addAttribute("commentDelete", true);
         redirectAttributes.addAttribute("commentId", commentId);
         return "redirect:/post/" + postId;
-//        if (findComment.getMember() == null || !findComment.getMember().getId().equals(principalDetail.getMember().getId())) {
-//            redirectAttributes.addAttribute("commentDeleteFail", true);
-//            redirectAttributes.addAttribute("commentId", findComment.getId());
-//            return "redirect:/post/" + postId;
-//        }
-//        commentService.delete(commentId);
-//        redirectAttributes.addAttribute("commentDelete", true);
-//        redirectAttributes.addAttribute("commentId", findComment.getId());
-//        return "redirect:/post/" + postId;
     }
 
     /**
@@ -215,7 +182,6 @@ public class PostController {
         log.info("좋아요 요청 아이디={}", principalDetail.getMember().getId());
         log.info("좋아요 요청 게시물={}", postId);
         Integer memberId = principalDetail.getMember().getId();
-//        heartService.save(heart, postId, principalDetail.getMember());
         postAppService.saveHeart(postId, memberId);
         return "redirect:/post/{postId}";
     }
@@ -223,7 +189,6 @@ public class PostController {
     @Transactional
     @DeleteMapping("/post/heart/{postId}")
     public String unHeart(@PathVariable Long postId, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
-//        heartService.delete(postId, principalDetail.getMember());
         postAppService.deleteHeart(postId, principalDetail.getMember().getId());
         return "redirect:/post/{postId}";
     }

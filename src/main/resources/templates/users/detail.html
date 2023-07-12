@@ -65,13 +65,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="hearts : ${mem
-                        ber.hearts}">
-                            <td th:text="${hearts.post.title}">
+                        <tr th:each="hearts : ${member.hearts}">
+                            <td th:text="${hearts.postTitle}">
                             </td>
                             <td>
                                 <button class="badge-primary float-end"
-                                        th:onclick="|location.href='@{/post/{postId}(postId=${hearts.post.id})}'|"
+                                        th:onclick="|location.href='@{/post/{postId}(postId=${hearts.postId})}'|"
                                         type="button">보러가기
                                 </button>
                             </td>
@@ -93,14 +92,14 @@
                             <tbody>
 
                             <tr th:each="comments : ${member.comments}">
-                                <td th:text="${comments.post.title}">
+                                <td th:text="${comments.postTitle}">
                                 </td>
 
                                 <td th:text="${comments.contents}">
                                 </td>
                                 <td>
                                     <button class="badge-primary float-end"
-                                            th:onclick="|location.href='@{/post/{postId}(postId=${comments.post.id})}'|"
+                                            th:onclick="|location.href='@{/post/{postId}(postId=${comments.postId})}'|"
                                             type="button">보러가기
                                     </button>
                                 </td>
@@ -127,7 +126,7 @@
                                     </td>
                                     <td>
                                         <button class="badge-primary float-end"
-                                                th:onclick="|location.href='@{/post/{postId}(postId=${posts.id})}'|"
+                                                th:onclick="|location.href='@{/post/{postId}(postId=${posts.postId})}'|"
                                                 type="button">보러가기
                                         </button>
                                     </td>

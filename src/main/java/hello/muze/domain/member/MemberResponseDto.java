@@ -1,8 +1,8 @@
 package hello.muze.domain.member;
 
 import hello.muze.domain.comment.Comment;
-import hello.muze.domain.heart.Heart;
 import hello.muze.domain.post.Post;
+import hello.muze.domain.post.PostResponseDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -16,8 +16,8 @@ public class MemberResponseDto {
 
     private String profile;
 
-    private List<Heart> hearts;
-    private List<Comment> comments;
-    private List<Post> posts;
+    private List<MemberHeartResponseDto> hearts;
+    private List<MemberCommentResponseDto> comments;
+    private List<MemberPostResponseDto> posts;
 
 }
