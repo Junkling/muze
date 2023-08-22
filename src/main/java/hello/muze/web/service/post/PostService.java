@@ -24,8 +24,6 @@ public class PostService implements PostServiceInterface {
     private final PostQueryPostRepository postQueryPostRepository;
     private final SpringDataJpaPostRepository springDataJpaPostRepository;
 
-
-
     @Override
     public Post save(Post post, Member member) {
         post.setView(0);

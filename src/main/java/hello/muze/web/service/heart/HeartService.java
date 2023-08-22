@@ -55,6 +55,7 @@ public class HeartService implements HeartServiceInterface {
     @Override
     public Integer heartCheck(Long postId, Member member) {
         Optional<Heart> heartWithUserAndPostId = findHeartWithUserAndPostId(member, postId);
+
         if (heartWithUserAndPostId.isEmpty()) {
             return 0;
         } else {

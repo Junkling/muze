@@ -1,7 +1,6 @@
 package hello.muze.web.appService;
 
 import hello.muze.domain.member.MemberRequestDto;
-import hello.muze.domain.member.MemberResponseDto;
 import hello.muze.web.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

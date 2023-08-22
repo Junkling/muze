@@ -12,7 +12,6 @@ import hello.muze.web.service.login.PwChangeDto;
 import hello.muze.web.service.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -80,7 +79,6 @@ public class MemberController {
         Integer memberId = principalDetail.getMember().getId();
         MemberResponseDto dto= memberAppService.findById(memberId);
 
-        log.info("loginId={}", memberId);
         return "users/updateForm";
     }
 
@@ -88,7 +86,6 @@ public class MemberController {
     @PostMapping("/detail/update")
     public String update(@Valid @ModelAttribute MemberUpdateDto memberUpdateDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetail principalDetail, RedirectAttributes redirectAttributes, HttpServletRequest httpServletRequest) {
         if (bindingResult.hasErrors()) {
-            log.info("error={}", bindingResult);
             return "redirect:/users/detail";
         }
         Integer memberId = principalDetail.getMember().getId();
@@ -115,7 +112,6 @@ public class MemberController {
         memberAppService.validChangePw(pwChangeDto, matches, samePw, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            log.info("error={}", bindingResult);
             return "users/changePW";
         }
         String rawPassword = pwChangeDto.getChangedPW();
@@ -133,36 +129,6 @@ public class MemberController {
         return "/users/findPw";
     }
 
-/**
- * 추가 작업 필요
- *
-    @Transactional
-    @PostMapping("/sendEmail")
-    public String sendEmail(Member member, MailDto mailDto, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
-        log.info("변경할 ID={}", mailDto.getLoginId());
-        String memberEmail = mailDto.getEmail();
-        String memberId = mailDto.getLoginId();
-        Member findMember = memberRepository.findByMember(memberId).orElseThrow();
-
-        if (!member.getEmail().equals(memberEmail)) {
-            redirectAttributes.addAttribute("checkFail", true);
-            return "redirect:/users/sendEmail";
-        }
-
-        String rawRandomPW = mailService.updatePassword(memberEmail);
-        String encodePW = bCryptPasswordEncoder.encode(rawRandomPW);
-        MailDto dto = mailService.createMailAndChangePassword(memberEmail, rawRandomPW);
-        dto.setLoginId(mailDto.getLoginId());
-
-        memberRepository.changePW(findMember, encodePW);
-        log.info("변경 암호화 비밀번호={}", findMember.getPassword());
-
-//        mailService.mailSend(dto);
-
-        return "/users/findPw";
-    }
-
-**/
 
     @DeleteMapping("/{memberId}")
     public String delete(@PathVariable Integer id) {

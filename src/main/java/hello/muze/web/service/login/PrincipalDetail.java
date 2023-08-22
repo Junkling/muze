@@ -78,4 +78,8 @@ public class PrincipalDetail implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public Integer findMemberId() {
+        return member.getId();
+    }
 }

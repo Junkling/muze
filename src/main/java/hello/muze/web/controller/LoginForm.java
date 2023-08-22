@@ -3,7 +3,6 @@ package hello.muze.web.controller;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Data
 public class LoginForm {

@@ -1,25 +1,14 @@
 package hello.muze.web.controller;
 
-import hello.muze.domain.attachment.Attachment;
 import hello.muze.domain.attachment.AttachmentAddForm;
 import hello.muze.domain.comment.CommentRequestDto;
-import hello.muze.domain.heart.HeartRequestDto;
+import hello.muze.domain.post.CategoryType;
 import hello.muze.domain.post.PostRequestDto;
 import hello.muze.domain.post.PostResponseDto;
 import hello.muze.web.appService.PostAppService;
-import hello.muze.web.service.fileStore.FileStore;
-import hello.muze.domain.comment.Comment;
-import hello.muze.domain.heart.Heart;
-import hello.muze.domain.member.Member;
-import hello.muze.domain.post.CategoryType;
-import hello.muze.domain.post.Post;
-import hello.muze.web.repository.attachment.AttachmentRepository;
 import hello.muze.web.repository.post.PostSearchCond;
 import hello.muze.web.repository.post.PostUpdateDto;
-import hello.muze.web.service.comment.CommentServiceInterface;
-import hello.muze.web.service.heart.HeartServiceInterface;
 import hello.muze.web.service.login.PrincipalDetail;
-import hello.muze.web.service.post.PostServiceInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -33,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -41,7 +29,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -66,6 +53,7 @@ public class PostController {
         return "post/posts";
     }
 
+
     @GetMapping("/posts/list/{categoryType}")
     public String freeList(@ModelAttribute("postSearch") PostSearchCond postSearch, Model model, @PathVariable String categoryType, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         postSearch.setCategoryType(categoryType);
@@ -77,16 +65,18 @@ public class PostController {
     @GetMapping("/post/{postId}")
     public String post(@PathVariable Long postId, Model model, CommentRequestDto commentRequestDto, @AuthenticationPrincipal PrincipalDetail principalDetail) throws IOException {
         PostResponseDto dto = postAppService.findById(postId);
+
         model.addAttribute("post", dto);
         model.addAttribute("commentRequestDto", commentRequestDto);
 
         if (principalDetail != null) {
-            Integer memberId = principalDetail.getMember().getId();
-            Integer heartCheck = postAppService.heartCheck(postId, memberId);
-            log.info("Check={}", heartCheck);
-            model.addAttribute("heartCheck", heartCheck);
+            model.addAttribute("heartCheck", getHeartCheck(postId, principalDetail));
         }
         return "post/post";
+    }
+
+    private Integer getHeartCheck(Long postId, PrincipalDetail principalDetail) {
+        return postAppService.heartCheck(postId, principalDetail.findMemberId());
     }
 
     @GetMapping("/posts/add")
@@ -102,7 +92,7 @@ public class PostController {
         }
 
         log.info("제목={}", postRequestDto.getTitle());
-        PostResponseDto dto = postAppService.savePost(postRequestDto,attachmentForm, principalDetail.getMember().getId());
+        PostResponseDto dto = postAppService.savePost(postRequestDto, attachmentForm, principalDetail.getMember().getId());
         redirectAttributes.addAttribute("postId", dto.getId());
         redirectAttributes.addAttribute("status", true);
 
@@ -126,7 +116,7 @@ public class PostController {
     @PostMapping("/post/{postId}/edit")
     public String edit(@PathVariable Long postId, @ModelAttribute PostUpdateDto updateParam) {
         log.info("제목 ={}", updateParam.getTitle());
-        postAppService.updatePost(postId,updateParam);
+        postAppService.updatePost(postId, updateParam);
         return "redirect:/post/{postId}";
     }
 

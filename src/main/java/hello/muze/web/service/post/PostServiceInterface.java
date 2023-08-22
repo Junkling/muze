@@ -8,6 +8,8 @@ import hello.muze.web.repository.post.PostUpdateDto;
 import java.util.List;
 import java.util.Optional;
 
+
+// SOLID 원칙중에 단일책임원칙이라고 있어
 public interface PostServiceInterface {
     Post save(Post post, Member member);
 

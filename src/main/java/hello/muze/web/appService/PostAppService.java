@@ -34,22 +34,15 @@ public class PostAppService {
     private final HeartServiceInterface heartService;
     private final FileStore fileStore;
 
+    // 5줄이 적당하걷느
     static void listMapper(Post p, PostResponseDto dto) {
         List<Comment> comment = p.getComment();
         List<CommentResponseDto> commentList = new ArrayList<>();
-        if (comment != null) {
+        if (comment != null) { // size = 0
             for (Comment c : comment) {
-                CommentResponseDto commentResponseDto = CommentResponseDto.builder()
-                        .id(c.getId())
-                        .memberNickName(c.getMember().getNickName())
-                        .memberId(c.getMember().getId())
-                        .postId(c.getPost().getId())
-                        .contents(c.getContents())
-                        .build();
-                commentList.add(commentResponseDto);
+                createCommnetResponse(commentList, c);
             }
         }
-        dto.setComment(commentList);
 
         List<Heart> hearts = p.getHearts();
         List<Long> heartList = new ArrayList<>();
@@ -70,6 +63,18 @@ public class PostAppService {
         dto.setAttachments(attachmentList);
     }
 
+    private static void createCommnetResponse(List<CommentResponseDto> commentList, Comment c) {
+        CommentResponseDto commentResponseDto = CommentResponseDto.builder()
+                .id(c.getId())
+                .memberNickName(c.getMember().getNickName())
+                .memberId(c.getMember().getId())
+                .postId(c.getPost().getId())
+                .contents(c.getContents())
+                .build();
+        commentList.add(commentResponseDto);
+    }
+
+    //
     static PostResponseDto entityToDto(Post p) {
         PostResponseDto dto = PostResponseDto.builder()
                 .id(p.getId())
@@ -88,6 +93,7 @@ public class PostAppService {
     public List<PostResponseDto> allList(PostSearchCond postSearchCond) {
         List<Post> post = postService.findPost(postSearchCond);
         List<PostResponseDto> list = new ArrayList<>();
+
         for (Post p : post) {
             PostResponseDto dto = entityToDto(p);
             list.add(dto);
@@ -99,6 +105,7 @@ public class PostAppService {
         Post post = postService.findById(postId).orElseThrow();
         PostResponseDto dto = entityToDto(post);
         return dto;
+
     }
 
     public Integer heartCheck(Long postId, Integer memberId) {
@@ -140,7 +147,8 @@ public class PostAppService {
 
     public boolean deleteCommentAuth(Long commentId, Integer memberId) {
         Comment comment = commentService.findById(commentId).orElseThrow();
-        if (comment.getMember() == null || comment.getMember().getId() != memberId) return false;
+        if (comment.getMember() == null || comment.getMember().getId() != memberId)
+            return false;
         commentService.delete(commentId);
         return true;
     }

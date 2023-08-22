@@ -1,6 +1,5 @@
 package hello.muze.web.interceptor;
 
-import hello.muze.web.SessionConst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -17,7 +16,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         String requestURI = request.getRequestURI();
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute(LONGIN_MEMBER) == null) {
-            log.info("리다이렉션");
             response.sendRedirect("/login?redirectURL=" + requestURI);
             return false;
         }

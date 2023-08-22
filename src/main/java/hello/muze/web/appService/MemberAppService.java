@@ -31,7 +31,7 @@ public class MemberAppService {
         member.setLoginId(dto.getLoginId());
         member.setNickName(dto.getNickName());
         member.setProfile(dto.getProfile());
-        memberRepository.save(member);
+        memberRepository.save(member); // << 도메인 계층으로 (Entity)
     }
 
     public List<MemberHeartResponseDto> findHearts(Integer memberId) {
