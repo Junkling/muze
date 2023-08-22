@@ -1,15 +1,11 @@
 package hello.muze.domain.post;
 
-import hello.muze.domain.attachment.Attachment;
-import hello.muze.domain.comment.Comment;
 import hello.muze.domain.comment.CommentResponseDto;
-import hello.muze.domain.heart.Heart;
 import lombok.Builder;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.*;
+import javax.persistence.Lob;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 @Data

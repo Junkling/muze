@@ -4,8 +4,6 @@ import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.heart.HeartRepository;
-import hello.muze.web.repository.member.MemberRepository;
-import hello.muze.web.repository.member.jpa.SpringDataJpaMemberRepository;
 import hello.muze.web.repository.post.jpa.SpringDataJpaPostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

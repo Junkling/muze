@@ -4,7 +4,10 @@ import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.post.Post;
 import hello.muze.web.repository.member.MemberRepository;
-import lombok.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.validator.constraints.Length;
@@ -17,17 +20,11 @@ import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.List;
 
-//@Entity
-
-/**
- * 추가해야할 기능: nickName 저장시 중복 방지, 메일 인증 추가, 비밀번호 확인 시스템, 메일로 계정정보 찾기
- */
-@Data // 이런거 쓰면안됌
+@Data
 @Entity
 @ToString(exclude = {"comment"})
 @Getter
 @Setter
-//@Builder
 public class Member {
 
     @Autowired

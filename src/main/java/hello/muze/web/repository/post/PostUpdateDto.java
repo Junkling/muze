@@ -1,11 +1,8 @@
 package hello.muze.web.repository.post;
 
 //import hello.muze.domain.post.category.CategoryType;
-import lombok.Data;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import java.time.LocalDateTime;
+import lombok.Data;
 
 @Data
 public class PostUpdateDto {

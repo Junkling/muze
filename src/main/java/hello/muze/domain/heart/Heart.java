@@ -5,7 +5,6 @@ import hello.muze.domain.post.Post;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Data

@@ -22,7 +22,7 @@
     <h4 class="mb-3">회원 정보</h4>
     <form action="" th:action th:object="${users}" method="post">
         <div>
-            <label for="email">메일 주소</label>
+            <label>메일 주소</label>
             <input type="text" id="loginId" th:field="*{email}" class="formcontrol"
                    th:errorclass="field-error">
             <div class="field-error" th:errors="*{email}" />

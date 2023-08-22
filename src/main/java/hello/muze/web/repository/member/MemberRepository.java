@@ -1,10 +1,8 @@
 package hello.muze.web.repository.member;
 
 import hello.muze.domain.member.Member;
-import hello.muze.web.service.login.PwChangeDto;
-import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.Optional;
 public interface MemberRepository {
     Member save(Member member);
 

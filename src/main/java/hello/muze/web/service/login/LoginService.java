@@ -2,7 +2,6 @@ package hello.muze.web.service.login;
 
 import hello.muze.domain.member.Member;
 import hello.muze.web.repository.member.MemberRepository;
-import hello.muze.web.repository.member.MemberUpdateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;

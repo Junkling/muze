@@ -1,18 +1,19 @@
 package hello.muze.domain.post;
 
-//import hello.muze.domain.post.category.CategoryType;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import hello.muze.domain.attachment.Attachment;
 import hello.muze.domain.comment.Comment;
 import hello.muze.domain.heart.Heart;
 import hello.muze.domain.member.Member;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.sql.Timestamp;
 import java.util.List;

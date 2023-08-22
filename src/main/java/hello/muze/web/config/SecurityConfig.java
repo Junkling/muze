@@ -2,7 +2,6 @@ package hello.muze.web.config;
 
 import hello.muze.web.argumentresolber.CustomLoginSuccessHandler;
 import hello.muze.web.service.login.LoginService;
-import hello.muze.web.service.login.PrincipalDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

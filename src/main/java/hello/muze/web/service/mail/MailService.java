@@ -1,11 +1,9 @@
 package hello.muze.web.service.mail;
 
 import hello.muze.web.repository.member.MailDto;
-import hello.muze.web.repository.member.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 

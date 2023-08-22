@@ -44,11 +44,6 @@
   <div class="py-5 text-center">
     <h2>로그인</h2>
   </div>
-<!--  <form action="post.html" th:action th:object="${loginForm}" method="post">-->
-<!--    <div th:if="${#fields.hasGlobalErrors()}">-->
-<!--      <p class="field-error" th:each="err : ${#fields.globalErrors()}"-->
-<!--         th:text="${err}">전체 오류 메시지</p>-->
-<!--    </div>-->
     <form action="/loginProc" method="post">
       <div>
         <label for="loginId">로그인 ID</label>

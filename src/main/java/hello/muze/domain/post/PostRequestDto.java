@@ -1,6 +1,5 @@
 package hello.muze.domain.post;
 
-import hello.muze.domain.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.*;
+import javax.persistence.Lob;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
 

@@ -9,9 +9,7 @@ import hello.muze.web.repository.member.MemberUpdateDto;
 import hello.muze.web.service.login.PwChangeDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 
 import java.util.ArrayList;

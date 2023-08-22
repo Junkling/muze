@@ -1,7 +1,5 @@
 package hello.muze.domain.comment;
 
-import hello.muze.domain.member.Member;
-import hello.muze.domain.post.Post;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
